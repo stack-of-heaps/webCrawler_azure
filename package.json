@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,8 +22,8 @@
     "jquery": "^3.4.1",
     "jsdom": "^15.1.1",
     "memory-cache": "^0.2.0",
+    "nodemon": "^1.19.3",
     "path": "^0.12.7",
-    "pug": "^2.0.4",
     "req-flash": "0.0.3",
     "sass": "^1.23.0"
   }

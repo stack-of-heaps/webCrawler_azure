@@ -2,18 +2,16 @@
 var express = require('express');
 var path = require('path');
 var app = express();
-app.engine('pug', require('pug').__express)
+const PORT = 3000;
+app.use(express.static('public'));
 
-app.set('port', 3000);
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
-
-app.get('/', function(req, res){
-  res.render('home');
+app.get('/', (req, res) => {
+  response.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
-//app.use('/', index)
-//app.use('/charts', charts)
+app.set('port', PORT);
 
 app.listen(app.get('port'));
-console.log('Express server listening on port ' + app.get('port'));
+console.log('Express server listening on port ' + PORT);
+//app.use('/', index)
+//app.use('/charts', charts)
