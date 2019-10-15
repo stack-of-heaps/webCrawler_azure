@@ -8,18 +8,13 @@
   <link rel="stylesheet" href="css/bootstrap.min.css">
 
   <style>
-    .extra-padding {
-      padding: 20px;
-    }
-
     .top-portion {
       height: 20vh;
       width: 100vw;
     }
 
     .bottom-portion {
-      height: 80vh;
-      width: 100vw;
+      height: 82vh;
     }
 
     .full-height {
@@ -27,141 +22,154 @@
     }
   </style>
 
-  <title>Capstone Graphical Web Crawler</title>
+  <title>Graphical Web Crawler</title>
 </head>
 
-<body class="bg-dark">
-  <div class="container col-12">
+<body class="bg-dark p-0 m-0">
+  <div class="container-fluid no-gutters">
     <h2 class="text-white">Graphical Web Crawler</h2>
-  </div>
 
-  <div class="col-12 bg-dark  ">
-    <div class="form-row">
-      <div class="col-7">
-        <form>
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="http://" id="search_url" required>
+    <div class="col-12 vh-20">
+      <div class="form-row">
+        <div class="col-7">
 
-          </div>
+          <!-- Search Form -->
 
-          <div class="form-row align-items-start justify-content-start">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="http://" id="search_url" required>
+            </div>
 
-            <div class="col-auto">
-              <div clas="form-group">
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" id="depth_search" name="search_type" checked>
-                  <label class="form-check-label text-white" for="depth_search"><strong>Depth-First
-                      Search</strong></label>
+            <div class="form-row align-items-start justify-content-start">
+              <div class="col-auto">
+                <div clas="form-group">
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="depth_search" name="search_type" checked>
+                    <label class="form-check-label text-white" for="depth_search"><strong>Depth-First
+                        Search</strong></label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="breadth_search" name="search_type">
+                    <label class="form-check-label text-white" for="breadth_search"><strong>Breadth-First
+                        Search</strong></label>
+                  </div>
                 </div>
               </div>
-              <div class="form-group">
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" id="breadth_search" name="search_type">
-                  <label class="form-check-label text-white" for="breadth_search"><strong>Breadth-First
-                      Search</strong></label>
-                </div>
+              <div class="form-group col-auto">
+                <input type="number" class="form-control" id="search_depth" placeholder="Depth" min="1">
+              </div>
+              <div class="col-auto">
+
+                <button class="btn btn-light">Crawl</button>
               </div>
             </div>
-            <div class="form-group col-auto">
-              <input type="number" class="form-control" id="search_depth" placeholder="Depth" min="1">
-            </div>
-            <div class="col-auto">
+          </form>
+        </div>
 
-              <button class="btn btn-light">Crawl</button>
-            </div>
-          </div>
+        <!-- End Search Form -->
 
-        </form>
+        <!-- Past Searches-->
 
-      </div>
-      <div class="col-5">
-
-        <table class="table table-sm table-bordered table-hover table-dark" id="past-searches-table">
-          <thead class="thead">
-            <tr>
-              <th colspan="2" class="text-white"><strong>Past Searches</strong></th>
-
-            </tr>
-          </thead>
-          <tbody id="past-searches-tbody">
-            <tr>
-              <td><a href="" class="text-primary">http://www.oregonstate.edu</a></td>
-            </tr>
-            <tr>
-              <td><a href="" class="text-primary">http://www.ars-technica.com</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-
-  <section clas="container">
-    <section class="row bottom-portion">
-      <div class="col-4 border full-height" id="side-bar">
-        <div class="container">
-          <h3 class="text-white"><strong>Inspect Results</strong></h3>
-          <div class="input-group">
-            <select class="custom-select" id="inputGroupSelect04">
-              <option selected>Jump to depth...</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </select>
-            <div class="input-group-append">
-              <button class="btn btn-warning" type="button">Go</button>
-            </div>
-          </div>
-
-          <div class="input-group">
-            <select class="custom-select" id="inputGroupSelect04">
-              <option selected>Highlight elements...</option>
-              <option value="1">Links</option>
-              <option value="2">Images</option>
-              <option value="3">SEO</option>
-            </select>
-            <div class="input-group-append">
-              <button class="btn btn-warning" type="button">Highlight</button>
-            </div>
-          </div>
-
-          <br>
-
-          <table class="table table-dark">
-            <thead class="thead bg-success">
+        <div class="col-5" id="past-searches-div">
+          <table class="table table-sm table-bordered table-hover table-dark" id="past-searches-table">
+            <thead class="thead">
               <tr>
-                <th>#</th>
-                <th>URL</th>
-                <th colspan="2">Text</th>
+                <th colspan="2" class="text-white"><strong>Past Searches</strong></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="past-searches-tbody">
               <tr>
-                <td class="text-white">1</td>
-                <td class="text-white">http://www.oregonstate.edu</td>
-                <td class="text-white">Home</td>
+                <td><a href="" class="text-primary">http://www.oregonstate.edu</a></td>
               </tr>
               <tr>
-                <td class="text-white">2</td>
-                <td class="text-white">http://www.oregonstate.edu/sports</td>
-                <td class="text-white">Sports</td>
-              </tr>
-              <tr>
-                <td class="text-white">3</td>
-                <td class="text-white">http://www.oregonstate.edu/login</td>
-                <td class="text-white">Login</td>
+                <td><a href="" class="text-primary">http://www.ars-technica.com</a></td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
-      <div class="col-8 border" id="visualization">Visualization</div>
-    </section>
-  </section>
 
-  <br>
-  <br>
+        <!-- End Past Searches -->
+
+      </div>
+    </div>
+
+    <!-- Bottom Half -->
+    <div class="row ">
+      <div class="col border bottom-portion" id="side-bar">
+        <h3 class="text-white"><strong>Inspect Results</strong></h3>
+        <div class="input-group">
+          <select class="custom-select" id="jump-to-depth">
+            <option selected>Jump to depth...</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+          <div class="input-group-append">
+            <button class="btn btn-warning" type="button">Go</button>
+          </div>
+        </div>
+
+        <!-- Jump to Depth -->
+        <div class="input-group">
+          <select class="custom-select" id="highlight-element">
+            <option selected>Highlight elements...</option>
+            <option value="1">Links</option>
+            <option value="2">Images</option>
+            <option value="3">SEO</option>
+          </select>
+          <!-- Jump to Depth -->
+
+          <!-- Highlight Element -->
+          <div class="input-group-append">
+            <button class="btn btn-warning" type="button">Highlight</button>
+          </div>
+        </div>
+        <!-- Highlight Element -->
+
+        <br>
+
+        <!-- Element Table -->
+        <table class="table table-dark" id="highlight-element-table">
+          <thead class="thead bg-success">
+            <tr>
+              <th>#</th>
+              <th>URL</th>
+              <th colspan="2">Text</th>
+            </tr>
+          </thead>
+          <tbody id="highlight-element-tbody">
+            <tr>
+              <td class="text-white">1</td>
+              <td class="text-white">http://www.oregonstate.edu</td>
+              <td class="text-white">Home</td>
+            </tr>
+            <tr>
+              <td class="text-white">2</td>
+              <td class="text-white">http://www.oregonstate.edu/sports</td>
+              <td class="text-white">Sports</td>
+            </tr>
+            <tr>
+              <td class="text-white">3</td>
+              <td class="text-white">http://www.oregonstate.edu/login</td>
+              <td class="text-white">Login</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Element Table -->
+
+      <!-- Visualization -->
+
+      <div class="col-8 border bottom-portion" id="visualization">
+        Visualization
+      </div>
+
+      <!-- Visualization -->
+
+    </div>
+  </div>
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
