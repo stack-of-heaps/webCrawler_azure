@@ -80,12 +80,6 @@
               </tr>
             </thead>
             <tbody id="past-searches-tbody">
-              <tr>
-                <td><a href="" class="text-primary">http://www.oregonstate.edu</a></td>
-              </tr>
-              <tr>
-                <td><a href="" class="text-primary">http://www.ars-technica.com</a></td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -164,6 +158,10 @@
 
       <div class="col-8 border bottom-portion" id="visualization">
         Visualization
+
+        <button onclick="displayAllCookies()">Show Cookies</button>
+        <button onclick="setPastSearchCookie('http\:\/\/www.ars-technica.com')">Set Cookie</button>
+        <button onclick="buildPastSearchTable()">Build Table</button>
       </div>
 
       <!-- Visualization -->
@@ -178,6 +176,7 @@
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script src="./js/ui_ajax.js"></script>
 </body>
 
 </html>
