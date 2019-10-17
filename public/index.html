@@ -73,15 +73,7 @@
         <!-- Past Searches-->
 
         <div class="col-5" id="past-searches-div">
-          <table class="table table-sm table-bordered table-hover table-dark" id="past-searches-table">
-            <thead class="thead">
-              <tr>
-                <th colspan="2" class="text-white"><strong>Past Searches</strong></th>
-              </tr>
-            </thead>
-            <tbody id="past-searches-tbody">
-            </tbody>
-          </table>
+
         </div>
 
         <!-- End Past Searches -->
@@ -91,66 +83,7 @@
 
     <!-- Bottom Half -->
     <div class="row ">
-      <div class="col border bottom-portion" id="side-bar">
-        <h3 class="text-white"><strong>Inspect Results</strong></h3>
-        <div class="input-group">
-          <select class="custom-select" id="jump-to-depth">
-            <option selected>Jump to depth...</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
-          <div class="input-group-append">
-            <button class="btn btn-warning" type="button">Go</button>
-          </div>
-        </div>
-
-        <!-- Jump to Depth -->
-        <div class="input-group">
-          <select class="custom-select" id="highlight-element">
-            <option selected>Highlight elements...</option>
-            <option value="1">Links</option>
-            <option value="2">Images</option>
-            <option value="3">SEO</option>
-          </select>
-          <!-- Jump to Depth -->
-
-          <!-- Highlight Element -->
-          <div class="input-group-append">
-            <button class="btn btn-warning" type="button">Highlight</button>
-          </div>
-        </div>
-        <!-- Highlight Element -->
-
-        <br>
-
-        <!-- Element Table -->
-        <table class="table table-dark" id="highlight-element-table">
-          <thead class="thead bg-success">
-            <tr>
-              <th>#</th>
-              <th>URL</th>
-              <th colspan="2">Text</th>
-            </tr>
-          </thead>
-          <tbody id="highlight-element-tbody">
-            <tr>
-              <td class="text-white">1</td>
-              <td class="text-white">http://www.oregonstate.edu</td>
-              <td class="text-white">Home</td>
-            </tr>
-            <tr>
-              <td class="text-white">2</td>
-              <td class="text-white">http://www.oregonstate.edu/sports</td>
-              <td class="text-white">Sports</td>
-            </tr>
-            <tr>
-              <td class="text-white">3</td>
-              <td class="text-white">http://www.oregonstate.edu/login</td>
-              <td class="text-white">Login</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="col border bottom-portion" id="side-panel">
       </div>
       <!-- Element Table -->
 
@@ -162,6 +95,8 @@
         <button onclick="displayAllCookies()">Show Cookies</button>
         <button onclick="setPastSearchCookie('http\:\/\/www.ars-technica.com')">Set Cookie</button>
         <button onclick="buildPastSearchTable()">Build Table</button>
+        <button id="buildPanelButton">Build Side Panel</button>
+        <button id="buildPastSearchButton">Build Past Searches</button>
       </div>
 
       <!-- Visualization -->
@@ -169,14 +104,18 @@
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
   <script src="js/bootstrap.min.js"></script>
-  <script src="./js/ui_ajax.js"></script>
+  <script type="module" src="./js/pastSearch.mjs"></script>
+  <script type="module" src="./js/sidePanel.js"></script>
 </body>
 
 </html>

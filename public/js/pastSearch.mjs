@@ -1,5 +1,9 @@
+document.getElementById("buildPastSearchButton").addEventListener("click", grabSearchTablePartial);
 
-getPastSearches = () => {
+function grabSearchTablePartial() {
+    $('#past-searches-div').load('/pastSearches', buildPastSearchTable);
+}
+function getPastSearches() {
     let cookies = document.cookie;
     let splitCookie = cookies.split(";").map(x => x.trim());
     let pastSearchString = "past-search";
@@ -11,13 +15,13 @@ getPastSearches = () => {
     return pastSearches;
 }
 
-getLastSearch = () => {
+function getLastSearch() {
     let pastSearches = getPastSearches();
     let lastSearchIndex = pastSearches.length - 1;
     return pastSearches[lastSearchIndex];
 }
 
-getNextSearchNumber = () => {
+function getNextSearchNumber() {
     let lastSearch = getLastSearch();
     let pastSearchString = lastSearch.split('=')[0];
     let numRegEx = /\d+/g
@@ -25,14 +29,14 @@ getNextSearchNumber = () => {
     return nextSearchNumber;
 }
 
-displayAllCookies = () => {
+function displayAllCookies() {
 
     let allCookies = document.cookie;
     alert(allCookies);
 
 }
 
-setPastSearchCookie = url => {
+function setPastSearchCookie(url) {
 
     let pastSearches = getPastSearches();
     let cookieNumber = null;
@@ -45,7 +49,7 @@ setPastSearchCookie = url => {
 
 }
 
-buildPastSearchTable = () => {
+function buildPastSearchTable() {
 
     let pastSearchesTbody = document.getElementById("past-searches-tbody");
     let pastSearches = getPastSearches();
@@ -60,7 +64,7 @@ buildPastSearchTable = () => {
 
 }
 
-buildSearchEntry = url => {
+function buildSearchEntry(url) {
 
     let newTR = document.createElement("tr");
     let newTD = document.createElement("td");
@@ -74,3 +78,4 @@ buildSearchEntry = url => {
     return newTR;
 }
 
+export {buildPastSearchTable};
