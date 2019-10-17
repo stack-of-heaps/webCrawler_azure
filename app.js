@@ -9,6 +9,16 @@ app.get('/', (req, res) => {
   response.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
+app.get('/sidePanel', (req, res) => {
+  console.log('sidepanel hit');
+  res.sendFile(path.join(__dirname + '/partials/sidePanel.html'))
+});
+
+app.get('/pastSearches', (req, res) => {
+  console.log('pastsearches hit');
+  res.sendFile(path.join(__dirname + '/partials/pastSearches.html'))
+});
+
 app.set('port', PORT);
 
 app.listen(app.get('port'));
