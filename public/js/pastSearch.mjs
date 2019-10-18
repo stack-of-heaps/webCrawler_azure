@@ -88,11 +88,17 @@ function buildPastSearchTable() {
 
 function buildSearchEntry(url) {
 
+    //Need to set unique identifier on button in order to create eventListener
+    //onclick would then send URL to the crawl search entry on the page,
+    //or, if we get there, would pull up past search result from server.
     let newTR = document.createElement("tr");
     let newTD = document.createElement("td");
+    newTD.setAttribute('class', 'p-0 m-0')
     let newAHref = document.createElement("a");
     newAHref.setAttribute('href', url);
     newAHref.setAttribute('class', 'text-primary');
+    newAHref.setAttribute('role', 'button');
+    newAHref.setAttribute('class', 'col btn btn-sm btn-outline-light' );
     newAHref.innerText = url;
     newTD.appendChild(newAHref);
     newTR.appendChild(newTD);
