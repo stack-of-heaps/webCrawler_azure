@@ -38,9 +38,9 @@
 
           <!-- Search Form -->
 
-          <form>
+          <form id="search-form" action="/postCrawl" method="POST">
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="http://" id="search_url" required>
+              <input type="url" class="form-control" placeholder="http://" id="search_url" required>
             </div>
 
             <div class="form-row align-items-start justify-content-start">
@@ -65,7 +65,7 @@
               </div>
               <div class="col">
 
-                <button class="col-lg-4 col-md-4 col-sm btn btn-primary">Crawl</button>
+                <button class="col-lg-4 col-md-4 col-sm btn btn-primary" type="submit">Crawl</button>
               </div>
             </div>
           </form>
