@@ -1,59 +1,67 @@
-<h3 class="text-white"><strong>Inspect Results</strong></h3>
-<div class="input-group">
-    <select class="custom-select" id="jump-to-depth">
-        <option selected>Jump to depth...</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-    </select>
-    <div class="input-group-append">
-        <button class="btn btn-warning" type="button">Go</button>
+<script>
+    $('#inspect-results-header').click(function () { $('#inspect-results-content').collapse('toggle') });
+</script>
+<h4 style="cursor: pointer;" id="inspect-results-header" class="text-white"><strong>Inspect Results</strong></h4>
+<div id="inspect-results-accordion" class="accordion">
+
+    <div id="inspect-results-content" class="collapse show" data-parent="#inspect-results-accordion">
+        <div class="input-group">
+            <select class="custom-select" id="jump-to-depth">
+                <option selected>Jump to depth...</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-warning" type="button">Go</button>
+            </div>
+        </div>
+
+        <!-- Jump to Depth -->
+        <div class="input-group">
+            <select class="custom-select" id="highlight-element">
+                <option selected>Highlight elements...</option>
+                <option value="1">Links</option>
+                <option value="2">Images</option>
+                <option value="3">SEO</option>
+            </select>
+            <!-- Jump to Depth -->
+
+            <!-- Highlight Element -->
+            <div class="input-group-append">
+                <button class="btn btn-warning" type="button">Highlight</button>
+            </div>
+
+            <br>
+
+            <!-- Element Table -->
+            <table class="table table-dark table-sm" id="highlight-element-table">
+                <thead class="thead bg-success">
+                    <tr>
+                        <th>#</th>
+                        <th>URL</th>
+                        <th colspan="2">Text</th>
+                    </tr>
+                </thead>
+                <tbody id="highlight-element-tbody">
+                    <tr>
+                        <td class="text-white">1</td>
+                        <td class="text-white">http://www.oregonstate.edu</td>
+                        <td class="text-white">Home</td>
+                    </tr>
+                    <tr>
+                        <td class="text-white">2</td>
+                        <td class="text-white">http://www.oregonstate.edu/sports</td>
+                        <td class="text-white">Sports</td>
+                    </tr>
+                    <tr>
+                        <td class="text-white">3</td>
+                        <td class="text-white">http://www.oregonstate.edu/login</td>
+                        <td class="text-white">Login</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-
-<!-- Jump to Depth -->
-<div class="input-group">
-    <select class="custom-select" id="highlight-element">
-        <option selected>Highlight elements...</option>
-        <option value="1">Links</option>
-        <option value="2">Images</option>
-        <option value="3">SEO</option>
-    </select>
-    <!-- Jump to Depth -->
-
-    <!-- Highlight Element -->
-    <div class="input-group-append">
-        <button class="btn btn-warning" type="button">Highlight</button>
-    </div>
-
-    <br>
-
-    <!-- Element Table -->
-    <table class="table table-dark" id="highlight-element-table">
-        <thead class="thead bg-success">
-            <tr>
-                <th>#</th>
-                <th>URL</th>
-                <th colspan="2">Text</th>
-            </tr>
-        </thead>
-        <tbody id="highlight-element-tbody">
-            <tr>
-                <td class="text-white">1</td>
-                <td class="text-white">http://www.oregonstate.edu</td>
-                <td class="text-white">Home</td>
-            </tr>
-            <tr>
-                <td class="text-white">2</td>
-                <td class="text-white">http://www.oregonstate.edu/sports</td>
-                <td class="text-white">Sports</td>
-            </tr>
-            <tr>
-                <td class="text-white">3</td>
-                <td class="text-white">http://www.oregonstate.edu/login</td>
-                <td class="text-white">Login</td>
-            </tr>
-        </tbody>
-    </table>
 </div>
 <!-- Element Table -->

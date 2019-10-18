@@ -20,6 +20,7 @@
     .full-height {
       height: 100%;
     }
+
   </style>
 
   <title>Graphical Web Crawler</title>
@@ -28,7 +29,6 @@
 <body class="bg-dark p-0 m-0">
   <div class="container-fluid no-gutters">
     <h2 class="text-white">Graphical Web Crawler</h2>
-
     <div class="col-12 vh-20">
       <div class="form-row">
         <div class="col-7">
@@ -70,46 +70,49 @@
 
         <!-- End Search Form -->
 
-        <!-- Past Searches-->
-
-        <div class="col-5" id="past-searches-div">
-
-        </div>
-
-        <!-- End Past Searches -->
-
       </div>
     </div>
 
     <!-- Bottom Half -->
-    <div class="row ">
-      <div class="col border bottom-portion" id="side-panel">
+    <div class="row bottom-portion">
+
+      <!-- Left -->
+      <div id="flex-container" class="col-5 d-flex flex-column border justify-content-start">
+
+        <!-- Inspect Results -->
+
+        <div id="inspect-results">    </div>
+        
+        <!-- Inspect Results -->
+        <!-- Past Searches -->
+
+        <div id="past-searches-div">        </div>
+        
+        <!-- Past Searches -->
+
       </div>
-      <!-- Element Table -->
+      
+      <!-- End Left -->
+      <div class="col-7">
 
-      <!-- Visualization -->
-
-      <div class="col-8 border bottom-portion" id="visualization">
+        <!-- Visualization -->
         Visualization
 
         <button onclick="displayAllCookies()">Show Cookies</button>
-        <button onclick="setPastSearchCookie('http\:\/\/www.ars-technica.com')">Set Cookie</button>
-        <button onclick="buildPastSearchTable()">Build Table</button>
+        <button id="setCookieButton">Set Cookie</button>
         <button id="buildPanelButton">Build Side Panel</button>
         <button id="buildPastSearchButton">Build Past Searches</button>
       </div>
-
-      <!-- Visualization -->
-
     </div>
+
+    <!-- Visualization -->
+
   </div>
 
 
-<script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
-  
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
