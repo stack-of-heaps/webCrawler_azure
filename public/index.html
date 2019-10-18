@@ -21,6 +21,9 @@
       height: 100%;
     }
 
+    .compact-text {
+      font-size: .8em;
+    }
   </style>
 
   <title>Graphical Web Crawler</title>
@@ -31,7 +34,7 @@
     <h2 class="text-white">Graphical Web Crawler</h2>
     <div class="col-12 vh-20">
       <div class="form-row">
-        <div class="col-7">
+        <div class="col">
 
           <!-- Search Form -->
 
@@ -60,9 +63,9 @@
               <div class="form-group col-auto">
                 <input type="number" class="form-control" id="search_depth" placeholder="Depth" min="1">
               </div>
-              <div class="col-auto">
+              <div class="col">
 
-                <button class="btn btn-light">Crawl</button>
+                <button class="col-lg-4 col-md-4 col-sm btn btn-primary">Crawl</button>
               </div>
             </div>
           </form>
@@ -74,38 +77,30 @@
     </div>
 
     <!-- Bottom Half -->
+
     <div class="row bottom-portion">
+      <div class="col-4">
+        <div id="flex-container" class="d-flex flex-column" style="height: 100%">
 
-      <!-- Left -->
-      <div id="flex-container" class="col-5 d-flex flex-column border justify-content-start">
+          <div id="inspect-results" class=""> </div>
 
-        <!-- Inspect Results -->
+          <br>
 
-        <div id="inspect-results">    </div>
-        
-        <!-- Inspect Results -->
-        <!-- Past Searches -->
+          <div id="past-searches-div" class="mt-auto"> </div>
 
-        <div id="past-searches-div">        </div>
-        
-        <!-- Past Searches -->
-
+        </div>
       </div>
-      
-      <!-- End Left -->
-      <div class="col-7">
+
+      <div class="col-8">
 
         <!-- Visualization -->
-        Visualization
-
         <button onclick="displayAllCookies()">Show Cookies</button>
         <button id="setCookieButton">Set Cookie</button>
         <button id="buildPanelButton">Build Side Panel</button>
         <button id="buildPastSearchButton">Build Past Searches</button>
+
       </div>
     </div>
-
-    <!-- Visualization -->
 
   </div>
 
