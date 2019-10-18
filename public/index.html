@@ -20,6 +20,31 @@
     .full-height {
       height: 100%;
     }
+    
+    #past-searches-div { 
+        height: 100px;
+  overflow: auto;
+    }
+    #past-searches-div tbody { 
+        height: 150px;
+  overflow-y: auto;
+  width: 100%;
+    }
+    
+    #past-searches-div thead,
+    #past-searches-div tbody, 
+    #past-searches-div tr, 
+    #past-searches-div td, 
+    #past-searches-div th { 
+      display: block;
+    }
+
+    #past-searches-div tbody td,
+    #past-searches-div tbody th,
+    #past-searches-div thead > tr > th {
+      float: left;
+      position: relative;
+    }
   </style>
 
   <title>Graphical Web Crawler</title>
@@ -28,7 +53,6 @@
 <body class="bg-dark p-0 m-0">
   <div class="container-fluid no-gutters">
     <h2 class="text-white">Graphical Web Crawler</h2>
-
     <div class="col-12 vh-20">
       <div class="form-row">
         <div class="col-7">
@@ -93,8 +117,7 @@
         Visualization
 
         <button onclick="displayAllCookies()">Show Cookies</button>
-        <button onclick="setPastSearchCookie('http\:\/\/www.ars-technica.com')">Set Cookie</button>
-        <button onclick="buildPastSearchTable()">Build Table</button>
+        <button id = "setCookieButton">Set Cookie</button>
         <button id="buildPanelButton">Build Side Panel</button>
         <button id="buildPastSearchButton">Build Past Searches</button>
       </div>

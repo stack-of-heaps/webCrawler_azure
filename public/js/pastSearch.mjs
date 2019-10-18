@@ -15,28 +15,30 @@ function getPastSearches() {
     return pastSearches;
 }
 
-function getLastSearch() {
+export function getLastSearch() {
     let pastSearches = getPastSearches();
     let lastSearchIndex = pastSearches.length - 1;
     return pastSearches[lastSearchIndex];
 }
 
-function getNextSearchNumber() {
+export function getNextSearchNumber() {
     let lastSearch = getLastSearch();
     let pastSearchString = lastSearch.split('=')[0];
     let numRegEx = /\d+/g
-    let nextSearchNumber = Number(pastSearchString.match(numRegEx)[0]) + 1;
+    let nextSearchNumber = Number(pastSearchString.match(numRegEx)) + 1;
     return nextSearchNumber;
 }
 
-function displayAllCookies() {
+export function displayAllCookies() {
 
     let allCookies = document.cookie;
     alert(allCookies);
 
 }
 
-function setPastSearchCookie(url) {
+document.getElementById("setCookieButton").addEventListener("click", () => { setPastSearchCookie('http://www.google.com') });
+
+export function setPastSearchCookie(url) {
 
     let pastSearches = getPastSearches();
     let cookieNumber = null;
@@ -47,6 +49,26 @@ function setPastSearchCookie(url) {
     let newCookie = `past-search${cookieNumber}=${thisURL}`;
     document.cookie = newCookie;
 
+    if (pastSearchTableIsVisible()) {
+        addNewPastSearch(thisURL);
+    } else {
+        grabSearchTablePartial();
+    }
+}
+
+function addNewPastSearch(url) {
+
+    let newEntry = buildSearchEntry(url);
+    let pastSearchesTbody = document.getElementById("past-searches-tbody");
+    pastSearchesTbody.append(newEntry);
+
+}
+
+function pastSearchTableIsVisible() {
+
+    let pastSearchesTbody = document.getElementById("past-searches-tbody");
+
+    return pastSearchesTbody === null ? false : true;
 }
 
 function buildPastSearchTable() {
@@ -74,8 +96,14 @@ function buildSearchEntry(url) {
     newAHref.innerText = url;
     newTD.appendChild(newAHref);
     newTR.appendChild(newTD);
+    newTR.appendChild(newTD);
+    newTR.appendChild(newTD);
 
     return newTR;
 }
 
-export {buildPastSearchTable};
+function handlePastSearchClick(e) {
+
+}
+
+export { buildPastSearchTable };
