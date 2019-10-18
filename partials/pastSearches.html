@@ -1,13 +1,20 @@
+<script>
+    $('#past-searches-header').click(function () { $('#past-searches-content').collapse('toggle') });
+</script>
+<h4 style="cursor: pointer;" id="past-searches-header" class="text-white"><strong>Past Searches</strong></h4>
+<div id="past-searches-accordion" class="accordion">
 
-
-<table class="table table-sm table-fixed table-bordered table-hover table-dark" id="past-searches-table">
-    <thead class="thead bg-warning">
-        <tr>
-            <th class="text-white col-4"><strong>Past Searches</strong></th>
-            <th class="text-white col-4">Search Depth</th>
-            <th class="text-white col-4">Search Style</th>
-        </tr>
-    </thead>
-    <tbody id="past-searches-tbody">
-    </tbody>
-</table>
+    <div id="past-searches-content" class="collapse show" data-parent="#past-searches-accordion">
+        <table class="table table-sm table-fixed table-bordered table-hover table-dark" id="past-searches-table">
+            <thead class="thead bg-secondary">
+                <tr>
+                    <th class="text-white col-4"><strong>URL</strong></th>
+                    <th class="text-white col-4">Depth</th>
+                    <th class="text-white col-4">Mode</th>
+                </tr>
+            </thead>
+            <tbody id="past-searches-tbody">
+            </tbody>
+        </table>
+    </div>
+</div>

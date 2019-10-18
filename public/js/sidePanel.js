@@ -2,6 +2,6 @@ document.getElementById("buildPanelButton").addEventListener("click", buildSideP
 
 function buildSidePanel() {
 
-    $('#side-panel').load("/sidePanel");
+    $('#inspect-results').load("/sidePanel");
 
 }
