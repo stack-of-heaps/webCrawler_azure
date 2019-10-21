@@ -1,8 +1,16 @@
-document.getElementById("buildPastSearchButton").addEventListener("click", grabSearchTablePartial);
+document.getElementById("buildPastSearchButton").addEventListener("click", fetchSearchTablePartial);
 
-function grabSearchTablePartial() {
-    $('#past-searches-div').load('/pastSearches', buildPastSearchTable);
+export function fetchSearchTablePartial() {
+    $('#past_searches_div').load('/pastSearches', buildPastSearchTable);
 }
+
+export function grabTutorialSearchTable() {
+    $('#past_searches_div').load('/pastSearchesTutorial');
+}
+export function deleteSearchTablePatial() {
+    $('#past_searches_div').empty();
+}
+
 function getPastSearches() {
     let cookies = document.cookie;
     let splitCookie = cookies.split(";").map(x => x.trim());
@@ -29,13 +37,6 @@ export function getNextSearchNumber() {
     return nextSearchNumber;
 }
 
-export function displayAllCookies() {
-
-    let allCookies = document.cookie;
-    alert(allCookies);
-
-}
-
 document.getElementById("setCookieButton").addEventListener("click", () => { setPastSearchCookie('http://www.google.com') });
 
 export function setPastSearchCookie(url) {
@@ -52,7 +53,7 @@ export function setPastSearchCookie(url) {
     if (pastSearchTableIsVisible()) {
         addNewPastSearch(thisURL);
     } else {
-        grabSearchTablePartial();
+        fetchSearchTablePartial();
     }
 }
 
@@ -95,10 +96,9 @@ function buildSearchEntry(url) {
     let newTD = document.createElement("td");
     newTD.setAttribute('class', 'p-0 m-0')
     let newAHref = document.createElement("a");
-    newAHref.setAttribute('href', url);
-    newAHref.setAttribute('class', 'text-primary');
+    newAHref.setAttribute('href', '#');
     newAHref.setAttribute('role', 'button');
-    newAHref.setAttribute('class', 'col btn btn-sm btn-outline-light' );
+    newAHref.setAttribute('class', 'col btn btn-sm btn-outline-light');
     newAHref.innerText = url;
     newTD.appendChild(newAHref);
     newTR.appendChild(newTD);
@@ -111,5 +111,3 @@ function buildSearchEntry(url) {
 function handlePastSearchClick(e) {
 
 }
-
-export { buildPastSearchTable };

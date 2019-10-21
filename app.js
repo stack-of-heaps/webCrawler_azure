@@ -17,6 +17,10 @@ app.get('/sidePanel', (req, res) => {
   res.sendFile(path.join(__dirname + '/partials/sidePanel.html'))
 });
 
+app.get('/sidePanelTutorial', (req, res) => {
+  res.sendFile(path.join(__dirname + '/partials/sidePanelTutorial.html'))
+});
+
 app.get('/pastSearches', (req, res) => {
   console.log('pastsearches hit');
   res.sendFile(path.join(__dirname + '/partials/pastSearches.html'))
@@ -30,6 +34,9 @@ app.get('/search', (req, res) => {
   // res.sendFile(path.join(__dirname + '/public/searchResults.html'))
 });
 
+app.get('/pastSearchesTutorial', (req, res) => {
+  res.sendFile(path.join(__dirname + '/partials/pastSearchesTutorial.html'))
+});
 
 app.set('port', PORT);
 
