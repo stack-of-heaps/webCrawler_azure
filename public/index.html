@@ -30,6 +30,25 @@
 </head>
 
 <body class="bg-dark p-0 m-0">
+
+  <!-- Modal -->
+  <div class="modal fade" id="tutorial_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle">Welcome</h5>
+        </div>
+        <div class="modal-body">
+          This seems to be your first time here. Would you like some tips on how to use the web crawler?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger w-50" data-dismiss="modal" id="no_tutorial">No Thanks</button>
+          <button type="button" class="btn btn-success w-50" data-dismiss="modal" id="yes_tutorial">Sure</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="container-fluid no-gutters">
     <h2 class="text-white">Graphical Web Crawler</h2>
     <div class="col-12 vh-20">
@@ -79,31 +98,30 @@
     <!-- Bottom Half -->
 
     <div class="row bottom-portion">
-      <div class="col-4">
+      <div class="col-3">
         <div id="flex-container" class="d-flex flex-column" style="height: 100%">
 
-          <div id="inspect-results" class=""> </div>
+          <div id="inspect_results" class=""> </div>
 
           <br>
 
-          <div id="past-searches-div" class="mt-auto"> </div>
+          <div id="past_searches_div" class="mt-auto"> </div>
 
         </div>
       </div>
 
-      <div class="col-8">
+      <div class="col-8" id="visualization">
 
         <!-- Visualization -->
-        <button onclick="displayAllCookies()">Show Cookies</button>
         <button id="setCookieButton">Set Cookie</button>
         <button id="buildPanelButton">Build Side Panel</button>
         <button id="buildPastSearchButton">Build Past Searches</button>
-
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tutorial_modal">
+          Modal
+        </button>
       </div>
     </div>
-
   </div>
-
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -112,8 +130,9 @@
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
   <script src="js/bootstrap.min.js"></script>
-  <script type="module" src="./js/pastSearch.mjs"></script>
+  <script type="module" src="./js/pastSearch.js"></script>
   <script type="module" src="./js/sidePanel.js"></script>
+  <script type="module" src="./js/tutorial.js"></script>
 </body>
 
 </html>

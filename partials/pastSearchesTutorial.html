@@ -1,0 +1,41 @@
+<script>
+    $('#past-searches-header').click(function () { $('#past-searches-content').collapse('toggle') });
+</script>
+<h6 style="cursor: pointer;" id="past-searches-header" class="text-white bg-danger p-1 m-0 rounded"><strong>Past Searches</strong></h6>
+<div id="past-searches-accordion" class="accordion">
+
+    <div id="past-searches-content" class="collapse show" data-parent="#past-searches-accordion">
+        <table class="table table-sm table-fixed table-bordered table-dark compact-text" id="past-searches-table">
+            <thead class="thead bg-info">
+                <tr>
+                    <th class="text-white col-4 border-0"><strong>URL</strong></th>
+                    <th class="text-white col-4 border-0">Depth</th>
+                    <th class="text-white col-4 border-0">Mode</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="p-0 m-0">
+                        <a class="col btn btn-sm btn-outline-light" role="button" href="#">google.com</a>
+                        </td>
+                    <td class="p0 m-0 text-center">3</td>
+                    <td class="p0 m-0">Depth-First</td>
+                </tr>
+                <tr>
+                    <td class="p-0 m-0">
+                        <a class="col btn btn-sm btn-outline-light" role="button" href="#">oregonstate.edu</a>
+                        </td>
+                    <td class="p0 m-0">1</td>
+                    <td class="p0 m-0">Breadth-First</td>
+                </tr>
+                <tr>
+                    <td class="p-0 m-0">
+                        <a class="col btn btn-sm btn-outline-light" role="button" href="#">ars-technica.com</a>
+                        </td>
+                    <td class="p0 m-0">8</td>
+                    <td class="p0 m-0">Depth-First</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
