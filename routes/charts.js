@@ -1,13 +1,10 @@
-var express = require('express')
-var app = express()
-
 // Cache middleware setup
 // app.get('/products', cacheMiddleware(30), function(req, res){
 
 app.get('/', function(req, res){
-  res.render('charts');
+  res.render('index');
 });
 
-app.put('/show', function(req, res, next){
-  res.render('charts/show');
+app.get('/search', function(req, res){
+  res.render('search');
 });
