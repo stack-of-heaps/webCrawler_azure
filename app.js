@@ -5,11 +5,13 @@ const Chart = require('./lib/hierarchy_chart.js');
 const Mongo = require('./mongoModule');
 var express = require('express');
 var path = require('path');
+const dayjs = require('dayjs');
 const PORT = 3000;
 var app = express();
-const assert = require('assert');
 app.set('port', PORT);
 app.use(express.static('public'));
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: false })) // for parsing application/x-www-form-urlencoded
 
 Mongo.connect()
   .then(() => console.log('Connected to database.'))
@@ -53,6 +55,19 @@ app.get('/mongotest', (req, res) => {
     console.log('Success');
     console.log(result);
   });
+})
+
+app.post('/mongopost', (req, res) => {
+  let reqObject = {
+    url: req.body.search_url,
+    search_type: req.body.search_type,
+    depth: req.body.search_depth,
+    date: dayjs().format()
+
+  }
+
+  console.log(reqObject);
+  res.send('hi');
 })
 
 app.listen(app.get('port'));

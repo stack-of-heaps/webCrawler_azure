@@ -57,30 +57,30 @@
 
           <!-- Search Form -->
 
-          <form id="search-form" action="/postCrawl" method="POST">
+          <form id="search-form" action="/mongopost" method="POST">
             <div class="form-group">
-              <input type="url" class="form-control" placeholder="http://" id="search_url" required>
+              <input type="url" class="form-control" placeholder="http://" id="search_url" name="search_url" required>
             </div>
 
             <div class="form-row align-items-start justify-content-start">
               <div class="col-auto">
                 <div clas="form-group">
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" id="depth_search" name="search_type" checked>
+                    <input type="radio" class="form-check-input" id="depth_search" name="search_type" value="depth_search" checked>
                     <label class="form-check-label text-white" for="depth_search"><strong>Depth-First
                         Search</strong></label>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" id="breadth_search" name="search_type">
+                    <input type="radio" class="form-check-input" id="breadth_search" name="search_type" value="breadth_search">
                     <label class="form-check-label text-white" for="breadth_search"><strong>Breadth-First
                         Search</strong></label>
                   </div>
                 </div>
               </div>
               <div class="form-group col-auto">
-                <input type="number" class="form-control" id="search_depth" placeholder="Depth" min="1">
+                <input type="number" class="form-control" id="search_depth" name="search_depth" placeholder="Depth" min="1">
               </div>
               <div class="col">
 
