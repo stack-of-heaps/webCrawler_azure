@@ -3,9 +3,11 @@
 const WebScraper = require('./lib/web_scraper.js');
 const Chart = require('./lib/hierarchy_chart.js');
 const Mongo = require('./mongoModule');
+const axios = require('axios');
 var express = require('express');
 var path = require('path');
 const dayjs = require('dayjs');
+const MongoManager = require('./mongoManager');
 const PORT = 3000;
 var app = express();
 app.set('port', PORT);
@@ -48,27 +50,70 @@ app.post('/search', (req, res) => {
 });
 
 app.get('/mongotest', (req, res) => {
+
   const collection = Mongo.get().collection('test');
   collection.insertMany([
-    {a : 1}, {a : 2}, {a: 3}
+    { a: 1 }, { a: 2 }, { a: 3 }
   ], (err, result) => {
     console.log('Success');
     console.log(result);
   });
 })
 
+app.get('/mongotest2', (req, res) => {
+  let id = "5db27801dd4a63161088106d";
+  MongoManager.findPastSearch(id);
+})
+
 app.post('/mongopost', (req, res) => {
-  let reqObject = {
-    url: req.body.search_url,
-    search_type: req.body.search_type,
-    depth: req.body.search_depth,
-    date: dayjs().format()
 
-  }
+  let url = req.body.search_url;
+  let reqbody = req.body;
 
-  console.log(reqObject);
-  res.send('hi');
+  axios.head(url)
+    .then(response => {
+      let statusCode = response.status;
+      if (statusCode >= 200 && statusCode <= 299) {
+        let dbResponse = submitPOST(reqbody);
+
+        //TODO:
+        //dbResponse is the ID of the new search entry. Use to set pastSearches cookie.
+        res.send('Trigger some sort of "Success" message or loading spinner; OK code received from website.');
+      }
+      if (statusCode >= 400) {
+        res.send('Trigger some sort of error handling here. Bad HTTP response.');
+      }
+    })
+    .catch(e => {
+      console.log(e);
+    })
 })
 
 app.listen(app.get('port'));
 console.log('Express server listening on port ' + PORT);
+
+
+function urlCheck(url) {
+
+}
+
+function submitPOST(reqBody) {
+
+  let reqObject = {
+    url: reqBody.search_url,
+    search_type: reqBody.search_type,
+    depth: reqBody.search_depth,
+    date: dayjs().format()
+  }
+
+  const collection = Mongo.get().collection('test');
+  collection.insertOne(reqObject, (err, res) => {
+    if (err) {
+      console.error("MONGO: ", err);
+    }
+    else {
+      let newEntryID = res.ops.insertedId;
+      return newEntryID;
+    }
+  })
+}

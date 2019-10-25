@@ -25,3 +25,5 @@ module.exports.get = () => {
     return client;
 }
 
+module.exports.getAll = () => {
+}
