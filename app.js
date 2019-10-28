@@ -49,71 +49,87 @@ app.post('/search', (req, res) => {
   // res.sendFile(path.join(__dirname + '/public/searchResults.html'))
 });
 
-app.get('/mongotest', (req, res) => {
-
-  const collection = Mongo.get().collection('test');
-  collection.insertMany([
-    { a: 1 }, { a: 2 }, { a: 3 }
-  ], (err, result) => {
-    console.log('Success');
-    console.log(result);
-  });
+app.get('/mongotest2', async (req, res) => {
+  let id = "5db63e2cc13f641cacd321c6";
+  console.log(await MongoManager.findPastSearch(id));
 })
 
-app.get('/mongotest2', (req, res) => {
-  let id = "5db27801dd4a63161088106d";
-  MongoManager.findPastSearch(id);
-})
+app.post('/crawlerRequest', async (req, res) => {
 
-app.post('/mongopost', (req, res) => {
+  let searchURL = req.body.search_url;
 
-  let url = req.body.search_url;
-  let reqbody = req.body;
 
-  axios.head(url)
-    .then(response => {
-      let statusCode = response.status;
-      if (statusCode >= 200 && statusCode <= 299) {
-        let dbResponse = submitPOST(reqbody);
-
-        //TODO:
-        //dbResponse is the ID of the new search entry. Use to set pastSearches cookie.
-        res.send('Trigger some sort of "Success" message or loading spinner; OK code received from website.');
+  //let x = await MongoManager.checkForExistingEntry();
+  let x = await submitPOST(req.body);
+  console.log(x);
+  /*
+  MongoManager.checkForExistingEntry(searchURL)
+    .then(existingEntry => {
+      if (!existingEntry) {
+        checkURL(url)
+          .then(urlStatus => {
+            if (URLIsOkay(urlStatus)) {
+              let mongoDTO = createDTO(req.body);
+              submitPOST(mongoDTO);
+            }
+          })
+          //URLStatus
+          .catch(err => console.error("Error checking URL status: ", err));
       }
-      if (statusCode >= 400) {
-        res.send('Trigger some sort of error handling here. Bad HTTP response.');
+      else {  // Entry exists with given URL
+        MongoManager.checkIfStale()
+
       }
     })
-    .catch(e => {
-      console.log(e);
-    })
+    //existingEntry
+    .catch(err => console.error("Error checking if URL already present in DB: ", err))
+    */
 })
+
+  app.get('/mongoCheckIfExists', (req, res) => {
+    MongoManager.checkForExistingEntry('http://www.yahoo.com')
+      .then(data => { return data === null });
+
+    res.end();
+  })
 
 app.listen(app.get('port'));
 console.log('Express server listening on port ' + PORT);
 
 
-function urlCheck(url) {
+async function checkURL(url) {
+  return new Promise((resolve, reject) => {
+    axios.head(url)
+      .then(response => {
+        resolve(response)
+      })
+      .catch(err => reject(err))
+  })
+}
+
+function URLIsOkay(response) {
+  let statusCode = response.status;
+  if (statusCode >= 200 && statusCode <= 299) {
+    return true;
+  }
+  if (statusCode >= 400) {
+    return false;
+  }
+}
+
+async function submitPOST(reqBody) {
+  let mongoDTO = createDTO(reqBody);
+  let mongoResult = MongoManager.createNewEntry(mongoDTO);
 
 }
 
-function submitPOST(reqBody) {
+function createDTO(reqBody) {
 
-  let reqObject = {
+  return {
     url: reqBody.search_url,
     search_type: reqBody.search_type,
     depth: reqBody.search_depth,
     date: dayjs().format()
   }
 
-  const collection = Mongo.get().collection('test');
-  collection.insertOne(reqObject, (err, res) => {
-    if (err) {
-      console.error("MONGO: ", err);
-    }
-    else {
-      let newEntryID = res.ops.insertedId;
-      return newEntryID;
-    }
-  })
 }

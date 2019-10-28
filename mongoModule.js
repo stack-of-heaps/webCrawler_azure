@@ -1,11 +1,12 @@
 const mongo = require('mongodb').MongoClient;
-const mongoURL = 'mongodb://localhost:27017';
+const localMongo = 'mongodb://localhost:27017';
+const atlasMongo = 'mongodb+srv://rico:suave@webcrawler-pwuoh.mongodb.net/test?retryWrites=true&w=majority';
 const dbName = 'WebCrawler';
-const defaultCollection = 'searches';
+const DEFAULT_COLLECTION = 'searches';
 let client = null;
 
 module.exports.connect = () => new Promise((resolve, reject) => {
-    mongo.connect(mongoURL, {
+    mongo.connect(atlasMongo, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     }, (err, connection) => {
@@ -17,12 +18,12 @@ module.exports.connect = () => new Promise((resolve, reject) => {
     });
 });
 
-module.exports.get = () => {
+module.exports.getCollection = () => {
     if (client === null) {
         console.error('No connection to MongoDB exists.');
     }
 
-    return client;
+    return client.collection(DEFAULT_COLLECTION);
 }
 
 module.exports.getAll = () => {
