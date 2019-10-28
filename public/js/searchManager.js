@@ -24,7 +24,7 @@ export async function crawlerRequest(event) {
 
     event.preventDefault();
     let searchDTO = createSearchDTO();
-    let url = searchDTO.url;
+    let url = searchDTO.search_url;
 
     let urlResponse = await $.post(CHECKURL, { url: url });
 
@@ -46,7 +46,7 @@ export async function crawlerRequest(event) {
     updatePastSearchStatus();
 
     let dbCheck = await $.post(PASTSEARCHBYURL, { url: url });
-    let dbStatus = getDbEntryStatus(dbCheck);
+    let dbStatus = getDbEntryStatus(dbCheck, searchDTO);
 
     updatePastSearchStatus(dbStatus);
     actOnPastSearchStatus(dbStatus, searchDTO);
@@ -154,7 +154,7 @@ function updatePastSearchStatus(status = null) {
     }
 }
 
-function getDbEntryStatus(dbCheck) {
+function getDbEntryStatus(dbCheck, searchDTO) {
     if (dbCheck._id === null) {
         return PAST_SEARCH_RESPONSES.NOT_EXIST;
     }
@@ -163,7 +163,7 @@ function getDbEntryStatus(dbCheck) {
         if (staleData) {
             return PAST_SEARCH_RESPONSES.EXISTS_STALE;
         }
-        else if (!staleData && Number(dbCheck.depth) >= Number(searchDTO.depth)) {
+        else if (!staleData && Number(dbCheck.depth) >= Number(searchDTO.search_depth)) {
             return PAST_SEARCH_RESPONSES.EXISTS_FRESH;
         }
         else {
@@ -204,9 +204,9 @@ function createSearchDTO() {
     let depth = $form.find('input[name="search_depth"]').val();
 
     return {
-        url: url,
+        search_url: url,
         search_type: searchType,
-        depth: depth
+        search_depth: depth
     }
 }
 
@@ -221,8 +221,8 @@ function dataIsStale(dbResult) {
 
 async function newSearchRequest(searchDTO) {
     let postResponse = await $.post(NEWENTRYURL, { 
-        url: searchDTO.url,
-        depth: searchDTO.depth,
+        search_url: searchDTO.search_url,
+        search_depth: searchDTO.search_depth,
         search_type: searchDTO.search_type
      });
 

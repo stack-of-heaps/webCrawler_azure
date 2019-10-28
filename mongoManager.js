@@ -16,7 +16,7 @@ module.exports.checkForExistingEntry = async url => {
         const collection = Mongo.getCollection();
         collection.findOne({ url: url }, (err, res) => {
             if (err) {
-                console.log("err: ", err);
+                console.error("checkForExistingEntry: ", err);
                 reject(err);
             }
             else {
@@ -44,7 +44,7 @@ module.exports.findPastSearch = async (id) => {
         let objectID = new ObjectID(id);
         collection.findOne(objectID, (err, res) => {
             if (err) {
-                console.error("Couldn't find object with id: ", id);
+                console.error("FindPastSearch: ", err);
                 reject(err);
             }
             else {
@@ -76,7 +76,7 @@ module.exports.createNewEntry = async (mongoDTO) => {
     const collection = Mongo.getCollection();
     collection.insertOne(mongoDTO, (err, res) => {
         if (err) {
-            console.error("MONGO: ", err);
+            console.error("createNewEntry: ", err);
             return err;
         }
         else {

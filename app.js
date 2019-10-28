@@ -65,14 +65,6 @@ app.post('/checkURL', async (req, res) => {
   }
 });
 
-/* Successful response object looks like:
-{ _id,
-  search_type,
-  depth,
-  date }
-  No results found object looks like:
-  {_id = null }
-  */
 app.post('/pastSearchByURL', async (req, res) => {
   let url = req.body.url;
 
@@ -92,6 +84,9 @@ app.post('/pastSearchByURL', async (req, res) => {
 
 app.post('/newSearch', async (req, res) => {
   let mongoDTO = createDTO(req.body);
+  if (mongoDTO === null) {
+    res.sendStatus(400);
+  }
   let postResponse = await submitPOST(mongoDTO);
   res.send(postResponse);
 
@@ -151,8 +146,7 @@ function URLIsOkay(response) {
   }
 }
 
-async function submitPOST(reqBody) {
-  let mongoDTO = createDTO(reqBody);
+async function submitPOST(mongoDTO) {
   let mongoResult = await MongoManager.createNewEntry(mongoDTO);
   return mongoResult;
 
@@ -166,5 +160,4 @@ function createDTO(reqBody) {
     depth: reqBody.search_depth,
     date: dayjs().format()
   }
-
 }
