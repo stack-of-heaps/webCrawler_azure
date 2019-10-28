@@ -1,3 +1,5 @@
+const PAST_SEARCH_BY_ID_URL = '/getPastSearchById'
+
 document.getElementById("buildPastSearchButton").addEventListener("click", fetchSearchTablePartial);
 
 export function fetchSearchTablePartial() {
@@ -57,7 +59,7 @@ export function setPastSearchCookie(url) {
     }
 }
 
-function addNewPastSearch(url) {
+function addNewPastSearch(url, id) {
 
     let newEntry = buildSearchEntry(url);
     let pastSearchesTbody = document.getElementById("past-searches-tbody");
@@ -87,15 +89,15 @@ function buildPastSearchTable() {
 
 }
 
-function buildSearchEntry(url) {
+function buildSearchEntry(url, id) {
 
     //Need to set unique identifier on button in order to create eventListener
     //onclick would then send URL to the crawl search entry on the page,
     //or, if we get there, would pull up past search result from server.
     let newTR = document.createElement("tr");
     let newTD = document.createElement("td");
-    newTD.setAttribute('class', 'p-0 m-0')
     let newAHref = document.createElement("a");
+    newAHref.setAttribute('id', id);
     newAHref.setAttribute('href', '#');
     newAHref.setAttribute('role', 'button');
     newAHref.setAttribute('class', 'col btn btn-sm btn-outline-light');
@@ -105,9 +107,20 @@ function buildSearchEntry(url) {
     newTR.appendChild(newTD);
     newTR.appendChild(newTD);
 
+    newAHref.addEventListener('click', handlePastSearchClick(newAHref));
+
     return newTR;
 }
 
 function handlePastSearchClick(e) {
+    console.log('in past search click event');
+    console.log(e);
+    let searchID = e.id;
+    $.post(PAST_SEARCH_BY_ID_URL, { id: searchId }, () => {
+        console.log(data);
+    })
+}
 
+function pastSearchNotFound() {
+    alert("Sorry, we couldn't find that past search. We will perform it again.");
 }

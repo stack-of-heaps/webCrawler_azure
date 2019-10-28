@@ -2,6 +2,8 @@ const Mongo = require('./mongoModule.js');
 const ObjectID = require('mongodb').ObjectID;
 const dayjs = require('dayjs');
 
+module.exports.GENERIC_SEARCH_ERROR = 'Sorry, there was an error checking the database. Try your search again.';
+
 /*ASYNC CHECKFOREXISTINGENTRY(URL): When user submits a search request, check to see if we already
 have that URL in the DB.
 Returns false if not found
