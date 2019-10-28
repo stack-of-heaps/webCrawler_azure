@@ -39,21 +39,18 @@ export function getNextSearchNumber() {
     return nextSearchNumber;
 }
 
-document.getElementById("setCookieButton").addEventListener("click", () => { setPastSearchCookie('http://www.google.com') });
-
-export function setPastSearchCookie(url) {
+export function setPastSearchCookie(url, id) {
 
     let pastSearches = getPastSearches();
     let cookieNumber = null;
     if (pastSearches.length > 0) {
         cookieNumber = getNextSearchNumber();
     }
-    let thisURL = "http://www.google.com";
-    let newCookie = `past-search${cookieNumber}=${thisURL}`;
+    let newCookie = `past-search${cookieNumber}=${url}`;
     document.cookie = newCookie;
 
     if (pastSearchTableIsVisible()) {
-        addNewPastSearch(thisURL);
+        addNewPastSearch(url, id);
     } else {
         fetchSearchTablePartial();
     }
@@ -61,7 +58,7 @@ export function setPastSearchCookie(url) {
 
 function addNewPastSearch(url, id) {
 
-    let newEntry = buildSearchEntry(url);
+    let newEntry = buildSearchEntry(url, id);
     let pastSearchesTbody = document.getElementById("past-searches-tbody");
     pastSearchesTbody.append(newEntry);
 
@@ -107,7 +104,7 @@ function buildSearchEntry(url, id) {
     newTR.appendChild(newTD);
     newTR.appendChild(newTD);
 
-    newAHref.addEventListener('click', handlePastSearchClick(newAHref));
+    newAHref.addEventListener('click', function() { handlePastSearchClick(newAHref) } );
 
     return newTR;
 }

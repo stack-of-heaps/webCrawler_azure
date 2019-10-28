@@ -90,6 +90,13 @@ app.post('/pastSearchByURL', async (req, res) => {
   }
 });
 
+app.post('/newSearch', async (req, res) => {
+  let mongoDTO = createDTO(req.body);
+  let postResponse = await submitPOST(mongoDTO);
+  res.send(postResponse);
+
+})
+
 app.post('/crawlerRequest', async (req, res) => {
 
   let searchURL = req.body.search_url;
@@ -124,7 +131,6 @@ app.post('/crawlerRequest', async (req, res) => {
 app.listen(app.get('port'));
 console.log('Express server listening on port ' + PORT);
 
-
 async function checkURL(url) {
   return new Promise((resolve, reject) => {
     axios.head(url)
@@ -147,7 +153,8 @@ function URLIsOkay(response) {
 
 async function submitPOST(reqBody) {
   let mongoDTO = createDTO(reqBody);
-  let mongoResult = MongoManager.createNewEntry(mongoDTO);
+  let mongoResult = await MongoManager.createNewEntry(mongoDTO);
+  return mongoResult;
 
 }
 
