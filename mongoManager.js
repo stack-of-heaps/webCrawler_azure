@@ -73,17 +73,26 @@ module.exports.entryStale = (entry) => {
 
 module.exports.createNewEntry = async (mongoDTO) => {
 
-    const collection = Mongo.getCollection();
-    collection.insertOne(mongoDTO, (err, res) => {
-        if (err) {
-            console.error("createNewEntry: ", err);
-            return err;
-        }
-        else {
-            let newEntryID = res.insertedId;
-            console.log("Added new entry in DB: ", newEntryID);
-            return newEntryID;
-        }
+    return new Promise((resolve, reject) => {
+
+        const collection = Mongo.getCollection();
+        collection.insertOne(mongoDTO, (err, res) => {
+            if (err) {
+                console.error("createNewEntry: ", err);
+                reject({
+                    _id: null,
+                    error: err
+                })
+            }
+            else {
+                console.log("Added new entry in DB: ", res.insertedId);
+
+                resolve({
+                    _id: res.insertedId,
+                    error: null
+                })
+            }
+        })
     })
 }
 
@@ -112,4 +121,3 @@ module.exports.getAllSearches = async () => {
         })
     })
 }
-

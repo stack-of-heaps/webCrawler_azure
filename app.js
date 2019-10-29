@@ -55,12 +55,12 @@ app.post('/checkURL', async (req, res) => {
   try {
     let response = await checkURL(url);
     console.log('/checkURL response: ', response.status);
-    let responseObject = {status: response.status};
+    let responseObject = { status: response.status };
     res.send(responseObject);
   }
   catch (e) {
     console.error('/checkURL error: ', e);
-    let responseObject = {status: 400};
+    let responseObject = { status: 400 };
     res.send(responseObject);
   }
 });
@@ -72,7 +72,7 @@ app.post('/pastSearchByURL', async (req, res) => {
     let response = await MongoManager.checkForExistingEntry(url);
     console.log('pastSearchByURL response: ', response);
     if (response === null) {
-      response = { _id: null}
+      response = { _id: null }
     }
     res.send(response);
   }
@@ -82,45 +82,15 @@ app.post('/pastSearchByURL', async (req, res) => {
   }
 });
 
-app.post('/newSearch', async (req, res) => {
+app.post('/newDBEntry', async (req, res) => {
   let mongoDTO = createDTO(req.body);
   if (mongoDTO === null) {
     res.sendStatus(400);
   }
-  let postResponse = await submitPOST(mongoDTO);
-  res.send(postResponse);
+  let mongoResult = await MongoManager.createNewEntry(mongoDTO);
+  console.log('newDBEntry mongoResult: ', mongoResult);
+  res.send(mongoResult);
 
-})
-
-app.post('/crawlerRequest', async (req, res) => {
-
-  let searchURL = req.body.search_url;
-
-  //let x = await MongoManager.checkForExistingEntry();
-  let x = await submitPOST(req.body);
-  console.log(x);
-  /*
-  MongoManager.checkForExistingEntry(searchURL)
-    .then(existingEntry => {
-      if (!existingEntry) {
-        checkURL(url)
-          .then(urlStatus => {
-            if (URLIsOkay(urlStatus)) {
-              let mongoDTO = createDTO(req.body);
-              submitPOST(mongoDTO);
-            }
-          })
-          //URLStatus
-          .catch(err => console.error("Error checking URL status: ", err));
-      }
-      else {  // Entry exists with given URL
-        MongoManager.checkIfStale()
-
-      }
-    })
-    //existingEntry
-    .catch(err => console.error("Error checking if URL already present in DB: ", err))
-    */
 })
 
 app.listen(app.get('port'));
@@ -134,22 +104,6 @@ async function checkURL(url) {
       })
       .catch(err => reject(err))
   })
-}
-
-function URLIsOkay(response) {
-  let statusCode = response.status;
-  if (statusCode >= 200 && statusCode <= 299) {
-    return true;
-  }
-  if (statusCode >= 400) {
-    return false;
-  }
-}
-
-async function submitPOST(mongoDTO) {
-  let mongoResult = await MongoManager.createNewEntry(mongoDTO);
-  return mongoResult;
-
 }
 
 function createDTO(reqBody) {

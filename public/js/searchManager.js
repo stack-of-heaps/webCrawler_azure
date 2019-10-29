@@ -2,9 +2,14 @@ import * as pastSearchManager from './pastSearch.js';
 const CRAWLER = '/crawlerRequest';
 const CHECKURL = '/checkURL';
 const PASTSEARCHBYURL = '/pastSearchByURL';
-const NEWENTRYURL = '/newSearch';
+const NEWENTRYURL = '/newDBEntry';
 
 const URL_RESPONSES = {
+    SUCCESS: 1,
+    FAILURE: 2
+}
+
+const UPDATE_RESULT = {
     SUCCESS: 1,
     FAILURE: 2
 }
@@ -20,7 +25,7 @@ document.getElementById('search-form').addEventListener('submit', crawlerRequest
 
 export async function crawlerRequest(event) {
 
-    validateURLStatus();
+    setURLValidationStatus();
 
     event.preventDefault();
     let searchDTO = createSearchDTO();
@@ -28,35 +33,25 @@ export async function crawlerRequest(event) {
 
     let urlResponse = await $.post(CHECKURL, { url: url });
 
-    /* Response object looks like:
-    { _id,
-    search_type,
-    depth,
-    date }
-    Or is null
-    */
-
     if (urlResponse.status >= 200 && urlResponse.status <= 299) {
-        validateURLStatus(URL_RESPONSES.SUCCESS);
+        setURLValidationStatus(URL_RESPONSES.SUCCESS);
     }
     else {
-        validateURLStatus(URL_RESPONSES.FAILURE);
+        setURLValidationStatus(URL_RESPONSES.FAILURE);
+        return;
     }
 
-    updatePastSearchStatus();
+    setPastSearchStatus();
 
-    let dbCheck = await $.post(PASTSEARCHBYURL, { url: url });
-    let dbStatus = getDbEntryStatus(dbCheck, searchDTO);
+    let pastSearch = await $.post(PASTSEARCHBYURL, { url: url });
+    let pastSearchStatus = getPastSearchInfo(pastSearch, searchDTO);
 
-    updatePastSearchStatus(dbStatus);
-    actOnPastSearchStatus(dbStatus, searchDTO);
-
-    console.log('dbcheck: ', dbCheck);
-    console.log('searchDTO: ', searchDTO);
+    setPastSearchStatus(pastSearchStatus);
+    actOnPastSearchStatus(pastSearchStatus, searchDTO);
 
 }
 
-function validateURLStatus(status = null) {
+function setURLValidationStatus(status = null) {
     const VALIDATING_TEXT = 'validating_url';
     const URL_STATUS_DIV = 'status_div';
     let visDiv = document.getElementById('visualization');
@@ -100,7 +95,7 @@ function validateURLStatus(status = null) {
     }
 }
 
-function updatePastSearchStatus(status = null) {
+function setPastSearchStatus(status = null) {
     const CHECKING_SEARCH = 'checking_search_text';
     const SEARCH_STATUS_DIV = 'search_status_div';
     let visDiv = document.getElementById('visualization');
@@ -154,7 +149,7 @@ function updatePastSearchStatus(status = null) {
     }
 }
 
-function getDbEntryStatus(dbCheck, searchDTO) {
+function getPastSearchInfo(dbCheck, searchDTO) {
     if (dbCheck._id === null) {
         return PAST_SEARCH_RESPONSES.NOT_EXIST;
     }
@@ -172,7 +167,7 @@ function getDbEntryStatus(dbCheck, searchDTO) {
     }
 }
 
-function actOnPastSearchStatus(dbStatus, searchDTO) {
+async function actOnPastSearchStatus(dbStatus, searchDTO) {
 
     switch (dbStatus) {
         case PAST_SEARCH_RESPONSES.EXISTS_FRESH: {
@@ -188,13 +183,81 @@ function actOnPastSearchStatus(dbStatus, searchDTO) {
             break;
         }
         case PAST_SEARCH_RESPONSES.NOT_EXIST: {
-            //TODO: GATHER NEW DATA
-            newSearchRequest(searchDTO);
+            setNewDBEntryStatus();
+            let result = await createDBEntry(searchDTO);
+            if (!result.error) {
+                pastSearchManager.setPastSearchCookie(searchDTO.search_url, result._id);
+                setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
+            }
+            else {
+                setNewDBEntryStatus(UPDATE_RESULT.FAILURE);
+            }
             break;
         }
         default:
             break;
     }
+}
+
+async function createDBEntry(searchDTO) {
+    let postResponse = await $.post(NEWENTRYURL, {
+        search_url: searchDTO.search_url,
+        search_depth: searchDTO.search_depth,
+        search_type: searchDTO.search_type
+    });
+
+    return postResponse;
+}
+
+function setNewDBEntryStatus(createResult = null) {
+    const DB_CREATE_STATUS = 'newDBEntry_url';
+    const DB_UPDATE_DIV = 'db_update_div';
+    let visDiv = document.getElementById('visualization');
+    let dbStatusElement = document.getElementById(DB_CREATE_STATUS);
+
+    if (!dbStatusElement) {
+        createDBStatusElement();
+        return;
+    }
+    else {
+        var statusDiv = document.getElementById(DB_UPDATE_DIV);
+        var statusH = document.getElementById(DB_CREATE_STATUS);
+        switch (createResult) {
+            case UPDATE_RESULT.SUCCESS: {
+                statusDiv.setAttribute('class', 'alert alert-success');
+                statusH.innerText = 'Successfully added search to the database. Once the crawler is finished, they will be displayed here. You can access the results any time in the future using the "Past Searches" element in the bottom left corner of the screen.';
+                break;
+            }
+            case UPDATE_RESULT.FAILURE: {
+                statusDiv.setAttribute('class', 'alert alert-danger');
+                statusH.innerText = 'Could not add to the database. Something went wrong. Please try again.';
+                break;
+            }
+            default: {
+                statusDiv.setAttribute('class', 'alert alert-danger');
+                statusH.innerText = 'Could not add to the database. Something went wrong. Please try again.';
+                break;
+            }
+        }
+    }
+}
+
+function createDBStatusElement() {
+    const DB_CREATE_STATUS = 'newDBEntry_url';
+    const DB_UPDATE_DIV = 'db_update_div';
+
+    let visDiv = document.getElementById('visualization');
+    let statusDiv = document.createElement('div');
+    statusDiv.setAttribute('id', DB_UPDATE_DIV);
+    statusDiv.setAttribute('class', 'alert alert-warning');
+    statusDiv.setAttribute('role', 'alert');
+
+    let statusH = document.createElement('h3');
+    statusH.setAttribute('id', DB_CREATE_STATUS);
+    statusH.innerText = 'Adding search to the database...';
+
+    statusDiv.appendChild(statusH);
+    visDiv.appendChild(statusDiv);
 }
 
 function createSearchDTO() {
@@ -217,16 +280,4 @@ function dataIsStale(dbResult) {
     let difference = dateNow - entryDate;
 
     return difference > MAX_HOURS ? true : false;
-}
-
-async function newSearchRequest(searchDTO) {
-    let postResponse = await $.post(NEWENTRYURL, { 
-        search_url: searchDTO.search_url,
-        search_depth: searchDTO.search_depth,
-        search_type: searchDTO.search_type
-     });
-
-     console.log(postResponse);
-     let id = postResponse;
-     pastSearchManager.setPastSearchCookie(searchDTO.url, id);
 }
