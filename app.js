@@ -69,7 +69,7 @@ app.post('/pastSearchByURL', async (req, res) => {
   let url = req.body.url;
 
   try {
-    let response = await MongoManager.checkForExistingEntry(url);
+    let response = await MongoManager.findPastSearchByURL(url);
     console.log('pastSearchByURL response: ', response);
     if (response === null) {
       response = { _id: null }
@@ -78,6 +78,23 @@ app.post('/pastSearchByURL', async (req, res) => {
   }
   catch (e) {
     console.error('/pastSearchByURL error: ', e);
+    res.send({ ErrorMessage: MongoManager.GENERIC_SEARCH_ERROR });
+  }
+});
+
+app.post('/pastSearchByID', async (req, res) => {
+  let id = req.body.id;
+
+  try {
+    let response = await MongoManager.findPastSearchById(id);
+    console.log('pastSearchByID response: ', response);
+    if (response === null) {
+      response = { _id: null }
+    }
+    res.send(response);
+  }
+  catch (e) {
+    console.error('/pastSearchByID error: ', e);
     res.send({ ErrorMessage: MongoManager.GENERIC_SEARCH_ERROR });
   }
 });

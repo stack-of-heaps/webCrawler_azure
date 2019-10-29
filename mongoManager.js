@@ -4,19 +4,19 @@ const dayjs = require('dayjs');
 
 module.exports.GENERIC_SEARCH_ERROR = 'Sorry, there was an error checking the database. Try your search again.';
 
-/*ASYNC CHECKFOREXISTINGENTRY(URL): When user submits a search request, check to see if we already
+/*ASYNC findPastSearchByURL(URL): When user submits a search request, check to see if we already
 have that URL in the DB.
 Returns false if not found
 Returns search if found
 TODO: Along with  FINDPASTSEARCH below, construct DTO to handle return of search object.
 */
-module.exports.checkForExistingEntry = async url => {
+module.exports.findPastSearchByURL = async url => {
 
     return new Promise((resolve, reject) => {
         const collection = Mongo.getCollection();
         collection.findOne({ url: url }, (err, res) => {
             if (err) {
-                console.error("checkForExistingEntry: ", err);
+                console.error("findPastSearchByURL: ", err);
                 reject(err);
             }
             else {
@@ -36,7 +36,7 @@ TODO: Return object populated with search details {
     json
 }
 */
-module.exports.findPastSearch = async (id) => {
+module.exports.findPastSearchById = async (id) => {
 
     return new Promise((resolve, reject) => {
 
@@ -44,7 +44,7 @@ module.exports.findPastSearch = async (id) => {
         let objectID = new ObjectID(id);
         collection.findOne(objectID, (err, res) => {
             if (err) {
-                console.error("FindPastSearch: ", err);
+                console.error("FindPastSearchById: ", err);
                 reject(err);
             }
             else {

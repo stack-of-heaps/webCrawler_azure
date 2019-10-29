@@ -2,6 +2,7 @@ import * as pastSearchManager from './pastSearch.js';
 const CRAWLER = '/crawlerRequest';
 const CHECKURL = '/checkURL';
 const PASTSEARCHBYURL = '/pastSearchByURL';
+const PASTSEARCHBYID = '/pastSearchByID';
 const NEWENTRYURL = '/newDBEntry';
 
 const URL_RESPONSES = {
@@ -43,7 +44,7 @@ export async function crawlerRequest(event) {
 
     setPastSearchStatus();
 
-    let pastSearch = await $.post(PASTSEARCHBYURL, { url: url });
+    let pastSearch = await fetchPastSearchByURL(url);
     let pastSearchStatus = getPastSearchInfo(pastSearch, searchDTO);
 
     setPastSearchStatus(pastSearchStatus);
@@ -93,6 +94,15 @@ function setURLValidationStatus(status = null) {
             }
         }
     }
+}
+
+async function fetchPastSearchByURL(url) {
+    let result = await $.post(PASTSEARCHBYURL, { url: url });
+    return result;
+}
+
+async function fetchPastSearchById(id) {
+
 }
 
 function setPastSearchStatus(status = null) {
@@ -208,6 +218,8 @@ async function createDBEntry(searchDTO) {
 
     return postResponse;
 }
+
+
 
 function setNewDBEntryStatus(createResult = null) {
     const DB_CREATE_STATUS = 'newDBEntry_url';

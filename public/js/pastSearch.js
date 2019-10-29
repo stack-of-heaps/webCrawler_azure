@@ -1,4 +1,4 @@
-const PAST_SEARCH_BY_ID_URL = '/getPastSearchById'
+const PAST_SEARCH_BY_ID_URL = '/pastSearchById'
 
 window.onload = function () {
     let pastSearches = getPastSearches();
@@ -93,15 +93,30 @@ function buildSearchEntry(url, id) {
     newTR.appendChild(newTD);
     newTR.appendChild(newTD);
 
-    newAHref.addEventListener('click', function () { handlePastSearchClick(newAHref) });
+    newAHref.addEventListener('click', function () { handlePastSearchClick(id) });
 
     return newTR;
 }
 
-function handlePastSearchClick(e) {
-    console.log(e);
-    let searchID = e.id;
-    $.post(PAST_SEARCH_BY_ID_URL, { id: searchId }, () => {
+function handlePastSearchClick(id) {
+    console.log("id: ", id);
+    $.post(PAST_SEARCH_BY_ID_URL, { id: id }, (data) => {
         console.log(data);
+        displayPastSearchInfo(data);
     })
+}
+
+function displayPastSearchInfo(search) {
+
+    let visDiv = document.getElementById('visualization');
+    let statusDiv = document.createElement('div');
+    statusDiv.setAttribute('class', 'alert alert-secondary');
+    statusDiv.setAttribute('role', 'alert');
+
+    let statusH = document.createElement('h6');
+    statusH.innerText = `Found search with the following attributes: id: ${search._id}, date: ${search.date}, depth: ${search.depth}, url: ${search.url}`;
+
+    statusDiv.appendChild(statusH);
+    visDiv.appendChild(statusDiv);
+
 }
