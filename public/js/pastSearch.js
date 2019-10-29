@@ -1,3 +1,12 @@
+const PAST_SEARCH_BY_ID_URL = '/pastSearchById'
+
+window.onload = function () {
+    let pastSearches = getPastSearches();
+    console.log('pastsearches: ', pastSearches);
+    if (pastSearches.length > 0) {
+        fetchSearchTablePartial();
+    }
+}
 document.getElementById("buildPastSearchButton").addEventListener("click", fetchSearchTablePartial);
 
 export function fetchSearchTablePartial() {
@@ -13,53 +22,29 @@ export function deleteSearchTablePatial() {
 
 function getPastSearches() {
     let cookies = document.cookie;
-    let splitCookie = cookies.split(";").map(x => x.trim());
-    let pastSearchString = "past-search";
-    let substringLength = pastSearchString.length;
-    let pastSearches = splitCookie.filter(x => {
-        return x.substring(0, substringLength) === pastSearchString;
-    });
+    let splitCookies = null;
 
-    return pastSearches;
-}
-
-export function getLastSearch() {
-    let pastSearches = getPastSearches();
-    let lastSearchIndex = pastSearches.length - 1;
-    return pastSearches[lastSearchIndex];
-}
-
-export function getNextSearchNumber() {
-    let lastSearch = getLastSearch();
-    let pastSearchString = lastSearch.split('=')[0];
-    let numRegEx = /\d+/g
-    let nextSearchNumber = Number(pastSearchString.match(numRegEx)) + 1;
-    return nextSearchNumber;
-}
-
-document.getElementById("setCookieButton").addEventListener("click", () => { setPastSearchCookie('http://www.google.com') });
-
-export function setPastSearchCookie(url) {
-
-    let pastSearches = getPastSearches();
-    let cookieNumber = null;
-    if (pastSearches.length > 0) {
-        cookieNumber = getNextSearchNumber();
+    if (cookies) {
+        splitCookies = cookies.split(";").map(x => x.trim()).filter(entry => !entry.includes('visited'));
     }
-    let thisURL = "http://www.google.com";
-    let newCookie = `past-search${cookieNumber}=${thisURL}`;
+    return splitCookies;
+}
+
+export function setPastSearchCookie(url, id) {
+
+    let newCookie = `${id}=${url}`;
     document.cookie = newCookie;
 
     if (pastSearchTableIsVisible()) {
-        addNewPastSearch(thisURL);
+        addNewPastSearch(url, id);
     } else {
         fetchSearchTablePartial();
     }
 }
 
-function addNewPastSearch(url) {
+function addNewPastSearch(url, id) {
 
-    let newEntry = buildSearchEntry(url);
+    let newEntry = buildSearchEntry(url, id);
     let pastSearchesTbody = document.getElementById("past-searches-tbody");
     pastSearchesTbody.append(newEntry);
 
@@ -68,7 +53,6 @@ function addNewPastSearch(url) {
 function pastSearchTableIsVisible() {
 
     let pastSearchesTbody = document.getElementById("past-searches-tbody");
-
     return pastSearchesTbody === null ? false : true;
 }
 
@@ -76,26 +60,30 @@ function buildPastSearchTable() {
 
     let pastSearchesTbody = document.getElementById("past-searches-tbody");
     let pastSearches = getPastSearches();
-    let pastSearchURLs = pastSearches.map(x => {
-        return x.split('=')[1];
-    })
 
-    pastSearchURLs.forEach(url => {
-        let newTR = buildSearchEntry(url);
+
+    pastSearches.forEach(search => {
+        
+        let values = search.split('=');
+        let id = values[0];
+        let url = values[1];
+
+        let newTR = buildSearchEntry(url, id);
         pastSearchesTbody.appendChild(newTR);
     });
 
 }
 
-function buildSearchEntry(url) {
+function buildSearchEntry(url, id) {
 
     //Need to set unique identifier on button in order to create eventListener
     //onclick would then send URL to the crawl search entry on the page,
     //or, if we get there, would pull up past search result from server.
+
     let newTR = document.createElement("tr");
     let newTD = document.createElement("td");
-    newTD.setAttribute('class', 'p-0 m-0')
     let newAHref = document.createElement("a");
+    newAHref.setAttribute('id', id);
     newAHref.setAttribute('href', '#');
     newAHref.setAttribute('role', 'button');
     newAHref.setAttribute('class', 'col btn btn-sm btn-outline-light');
@@ -105,9 +93,30 @@ function buildSearchEntry(url) {
     newTR.appendChild(newTD);
     newTR.appendChild(newTD);
 
+    newAHref.addEventListener('click', function () { handlePastSearchClick(id) });
+
     return newTR;
 }
 
-function handlePastSearchClick(e) {
+function handlePastSearchClick(id) {
+    console.log("id: ", id);
+    $.post(PAST_SEARCH_BY_ID_URL, { id: id }, (data) => {
+        console.log(data);
+        displayPastSearchInfo(data);
+    })
+}
+
+function displayPastSearchInfo(search) {
+
+    let visDiv = document.getElementById('visualization');
+    let statusDiv = document.createElement('div');
+    statusDiv.setAttribute('class', 'alert alert-secondary');
+    statusDiv.setAttribute('role', 'alert');
+
+    let statusH = document.createElement('h6');
+    statusH.innerText = `Found search with the following attributes: id: ${search._id}, date: ${search.date}, depth: ${search.depth}, url: ${search.url}`;
+
+    statusDiv.appendChild(statusH);
+    visDiv.appendChild(statusDiv);
 
 }
