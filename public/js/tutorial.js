@@ -39,7 +39,7 @@ function showAndHidePopovers() {
 
     //Remove example past searches and side panel
     setTimeout(() => {
-        pastSearchManager.deleteSearchTablePatial();
+        pastSearchManager.deleteSearchTablePartial();
         sidePanelManager.deleteSidePanel();
 
     }, (allSelectors.length * 8500))

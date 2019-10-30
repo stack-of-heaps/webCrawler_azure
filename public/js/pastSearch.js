@@ -2,12 +2,10 @@ const PAST_SEARCH_BY_ID_URL = '/pastSearchById'
 
 window.onload = function () {
     let pastSearches = getPastSearches();
-    console.log('pastsearches: ', pastSearches);
-    if (pastSearches.length > 0) {
+    if (pastSearches !== null && pastSearches.length > 0) {
         fetchSearchTablePartial();
     }
 }
-document.getElementById("buildPastSearchButton").addEventListener("click", fetchSearchTablePartial);
 
 export function fetchSearchTablePartial() {
     $('#past_searches_div').load('/pastSearches', buildPastSearchTable);
@@ -16,7 +14,7 @@ export function fetchSearchTablePartial() {
 export function grabTutorialSearchTable() {
     $('#past_searches_div').load('/pastSearchesTutorial');
 }
-export function deleteSearchTablePatial() {
+export function deleteSearchTablePartial() {
     $('#past_searches_div').empty();
 }
 
@@ -75,10 +73,6 @@ function buildPastSearchTable() {
 }
 
 function buildSearchEntry(url, id) {
-
-    //Need to set unique identifier on button in order to create eventListener
-    //onclick would then send URL to the crawl search entry on the page,
-    //or, if we get there, would pull up past search result from server.
 
     let newTR = document.createElement("tr");
     let newTD = document.createElement("td");
