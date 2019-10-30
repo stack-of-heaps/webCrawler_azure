@@ -6,29 +6,35 @@ const PASTSEARCHBYID = '/pastSearchByID';
 const NEWENTRYURL = '/newDBEntry';
 
 const URL_RESPONSES = {
+    IN_PROGRESS: 0,
     SUCCESS: 1,
-    FAILURE: 2
+    FAILURE: 2,
+    innerText: 'Validating URL...'
 }
 
 const UPDATE_RESULT = {
+    IN_PROGRESS: 0,
     SUCCESS: 1,
-    FAILURE: 2
+    FAILURE: 2,
+    innerText: 'Creating database entry...'
 }
 
 const PAST_SEARCH_RESPONSES = {
+    IN_PROGRESS: 0,
     EXISTS_FRESH: 1,
     EXISTS_STALE: 2,
     EXISTS_SHALLOW: 3,
-    NOT_EXIST: 4
+    NOT_EXIST: 4,
+    innerText: 'Searching for search with that URL...'
 }
 
 document.getElementById('search-form').addEventListener('submit', crawlerRequest);
 
 export async function crawlerRequest(event) {
-
+    
+    event.preventDefault();
     setURLValidationStatus();
 
-    event.preventDefault();
     let searchDTO = createSearchDTO();
     let url = searchDTO.search_url;
 
@@ -52,19 +58,24 @@ export async function crawlerRequest(event) {
 
 }
 
-function setURLValidationStatus(status = null) {
+function setURLValidationStatus(status = URL_RESPONSES.IN_PROGRESS) {
     const VALIDATING_TEXT = 'validating_url';
     const URL_STATUS_DIV = 'status_div';
     let validatingElement = document.getElementById(VALIDATING_TEXT);
 
     if (!validatingElement) {
-        createStatusElement(URL_STATUS_DIV, VALIDATING_TEXT);
+        createStatusElement(URL_STATUS_DIV, VALIDATING_TEXT, URL_RESPONSES);
         return;
     }
     else {
         var statusDiv = document.getElementById(URL_STATUS_DIV);
         var statusH = document.getElementById(VALIDATING_TEXT);
         switch (status) {
+            case URL_RESPONSES.IN_PROGRESS: {
+                statusDiv.setAttribute('class', 'alert alert-info');
+                statusH.innerText = 'Checking URL status...';
+                break;
+            }
             case URL_RESPONSES.SUCCESS: {
                 statusDiv.setAttribute('class', 'alert alert-success');
                 statusH.innerText = 'URL OK !';
@@ -84,25 +95,27 @@ function setURLValidationStatus(status = null) {
     }
 }
 
-async function fetchPastSearchByURL(url) {
-    let result = await $.post(PASTSEARCHBYURL, { url: url });
-    return result;
-}
+c
 
-function setPastSearchStatus(status = null) {
+function setPastSearchStatus(status = PAST_SEARCH_RESPONSES.IN_PROGRESS) {
     const CHECKING_SEARCH = 'checking_search_text';
     const SEARCH_STATUS_DIV = 'search_status_div';
     let validatingElement = document.getElementById(CHECKING_SEARCH);
     console.log('validating element: ', validatingElement);
 
     if (!validatingElement) {
-        createStatusElement(SEARCH_STATUS_DIV, CHECKING_SEARCH);
+        createStatusElement(SEARCH_STATUS_DIV, CHECKING_SEARCH, PAST_SEARCH_RESPONSES);
         return;
     }
     else {
         var statusDiv = document.getElementById(SEARCH_STATUS_DIV);
         var statusH = document.getElementById(CHECKING_SEARCH);
         switch (status) {
+            case PAST_SEARCH_RESPONSES.IN_PROGRESS: {
+                statusDiv.setAttribute('class', 'alert alert-info');
+                statusH.innerText = 'Searching database for that URL...';
+                break;
+            }
             case PAST_SEARCH_RESPONSES.EXISTS_FRESH: {
                 statusDiv.setAttribute('class', 'alert alert-primary');
                 statusH.innerText = 'Past search found with fresh data.';
@@ -194,19 +207,24 @@ async function createDBEntry(searchDTO) {
 
 
 
-function setNewDBEntryStatus(createResult = null) {
+function setNewDBEntryStatus(createResult = UPDATE_RESULT.IN_PROGRESS) {
     const DB_CREATE_STATUS = 'newDBEntry_url';
     const DB_UPDATE_DIV = 'db_update_div';
     let dbStatusElement = document.getElementById(DB_CREATE_STATUS);
 
     if (!dbStatusElement) {
-        createStatusElement(DB_UPDATE_DIV, DB_CREATE_STATUS);
+        createStatusElement(DB_UPDATE_DIV, DB_CREATE_STATUS, UPDATE_RESULT);
         return;
     }
     else {
         var statusDiv = document.getElementById(DB_UPDATE_DIV);
         var statusH = document.getElementById(DB_CREATE_STATUS);
         switch (createResult) {
+            case UPDATE_RESULT.IN_PROGRESS: {
+                statusDiv.setAttribute('class', 'alert alert-success');
+                statusH.innerText = 'Creating new database entry...';
+                break;
+            }
             case UPDATE_RESULT.SUCCESS: {
                 statusDiv.setAttribute('class', 'alert alert-success');
                 statusH.innerText = 'Successfully added search to the database. Once the crawler is finished, they will be displayed here. You can access the results any time in the future using the "Past Searches" element in the bottom left corner of the screen.';
@@ -226,7 +244,13 @@ function setNewDBEntryStatus(createResult = null) {
     }
 }
 
-function createStatusElement(div_id, text_id) {
+async function fetchPastSearchByURL(url) {
+    let result = await $.post(PASTSEARCHBYURL, { url: url });
+    return result;
+}
+
+function createStatusElement(div_id, text_id, textPackage) {
+    let innerText = textPackage.innerText;
     let visDiv = document.getElementById('visualization');
     let statusDiv = document.createElement('div');
     statusDiv.setAttribute('id', div_id);
@@ -234,7 +258,7 @@ function createStatusElement(div_id, text_id) {
     statusDiv.setAttribute('role', 'alert');
     let statusH = document.createElement('h3');
     statusH.setAttribute('id', text_id);
-    statusH.innerText = 'Validating URL...';
+    statusH.innerText = innerText;
     statusDiv.appendChild(statusH);
     visDiv.appendChild(statusDiv);
 }

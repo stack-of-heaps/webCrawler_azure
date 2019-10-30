@@ -1,5 +1,3 @@
-document.getElementById("buildPanelButton").addEventListener("click", buildSidePanel);
-
 export default function buildSidePanel() {
     $('#inspect_results').load("/sidePanel");
 }

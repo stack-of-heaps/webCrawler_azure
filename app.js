@@ -25,7 +25,6 @@ app.get('/', (req, res) => {
 
 // <-- PARTIALS -->
 app.get('/sidePanel', (req, res) => {
-  console.log('sidepanel hit');
   res.sendFile(path.join(__dirname + '/partials/sidePanel.html'))
 });
 
@@ -34,7 +33,6 @@ app.get('/sidePanelTutorial', (req, res) => {
 });
 
 app.get('/pastSearches', (req, res) => {
-  console.log('pastsearches hit');
   res.sendFile(path.join(__dirname + '/partials/pastSearches.html'))
 });
 

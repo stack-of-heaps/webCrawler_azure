@@ -2,12 +2,10 @@ const PAST_SEARCH_BY_ID_URL = '/pastSearchById'
 
 window.onload = function () {
     let pastSearches = getPastSearches();
-    console.log('pastsearches: ', pastSearches);
-    if (pastSearches.length > 0) {
+    if (pastSearches !== null && pastSearches.length > 0) {
         fetchSearchTablePartial();
     }
 }
-document.getElementById("buildPastSearchButton").addEventListener("click", fetchSearchTablePartial);
 
 export function fetchSearchTablePartial() {
     $('#past_searches_div').load('/pastSearches', buildPastSearchTable);
