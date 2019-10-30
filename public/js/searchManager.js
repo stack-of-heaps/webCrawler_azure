@@ -55,22 +55,10 @@ export async function crawlerRequest(event) {
 function setURLValidationStatus(status = null) {
     const VALIDATING_TEXT = 'validating_url';
     const URL_STATUS_DIV = 'status_div';
-    let visDiv = document.getElementById('visualization');
     let validatingElement = document.getElementById(VALIDATING_TEXT);
-    console.log('validating element: ', validatingElement);
 
     if (!validatingElement) {
-        let statusDiv = document.createElement('div');
-        statusDiv.setAttribute('id', URL_STATUS_DIV);
-        statusDiv.setAttribute('class', 'alert alert-warning');
-        statusDiv.setAttribute('role', 'alert');
-
-        let statusH = document.createElement('h3');
-        statusH.setAttribute('id', VALIDATING_TEXT);
-        statusH.innerText = 'Validating URL...';
-
-        statusDiv.appendChild(statusH);
-        visDiv.appendChild(statusDiv);
+        createStatusElement(URL_STATUS_DIV, VALIDATING_TEXT);
         return;
     }
     else {
@@ -101,29 +89,14 @@ async function fetchPastSearchByURL(url) {
     return result;
 }
 
-async function fetchPastSearchById(id) {
-
-}
-
 function setPastSearchStatus(status = null) {
     const CHECKING_SEARCH = 'checking_search_text';
     const SEARCH_STATUS_DIV = 'search_status_div';
-    let visDiv = document.getElementById('visualization');
     let validatingElement = document.getElementById(CHECKING_SEARCH);
     console.log('validating element: ', validatingElement);
 
     if (!validatingElement) {
-        let statusDiv = document.createElement('div');
-        statusDiv.setAttribute('id', SEARCH_STATUS_DIV);
-        statusDiv.setAttribute('class', 'alert alert-info');
-        statusDiv.setAttribute('role', 'alert');
-
-        let statusH = document.createElement('h3');
-        statusH.setAttribute('id', CHECKING_SEARCH);
-        statusH.innerText = 'Checking for similar search in database...';
-
-        statusDiv.appendChild(statusH);
-        visDiv.appendChild(statusDiv);
+        createStatusElement(SEARCH_STATUS_DIV, CHECKING_SEARCH);
         return;
     }
     else {
@@ -224,11 +197,10 @@ async function createDBEntry(searchDTO) {
 function setNewDBEntryStatus(createResult = null) {
     const DB_CREATE_STATUS = 'newDBEntry_url';
     const DB_UPDATE_DIV = 'db_update_div';
-    let visDiv = document.getElementById('visualization');
     let dbStatusElement = document.getElementById(DB_CREATE_STATUS);
 
     if (!dbStatusElement) {
-        createDBStatusElement();
+        createStatusElement(DB_UPDATE_DIV, DB_CREATE_STATUS);
         return;
     }
     else {
@@ -254,20 +226,15 @@ function setNewDBEntryStatus(createResult = null) {
     }
 }
 
-function createDBStatusElement() {
-    const DB_CREATE_STATUS = 'newDBEntry_url';
-    const DB_UPDATE_DIV = 'db_update_div';
-
+function createStatusElement(div_id, text_id) {
     let visDiv = document.getElementById('visualization');
     let statusDiv = document.createElement('div');
-    statusDiv.setAttribute('id', DB_UPDATE_DIV);
+    statusDiv.setAttribute('id', div_id);
     statusDiv.setAttribute('class', 'alert alert-warning');
     statusDiv.setAttribute('role', 'alert');
-
     let statusH = document.createElement('h3');
-    statusH.setAttribute('id', DB_CREATE_STATUS);
-    statusH.innerText = 'Adding search to the database...';
-
+    statusH.setAttribute('id', text_id);
+    statusH.innerText = 'Validating URL...';
     statusDiv.appendChild(statusH);
     visDiv.appendChild(statusDiv);
 }
