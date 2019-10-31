@@ -1,6 +1,7 @@
-var d3 = require('d3');
+class HierarchyChartLayout {
+  constructor() {
+  }
 
-module.exports = class HierarchyChartLayout {
   getLayout() {
     var layout = {
       width: 400,

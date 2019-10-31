@@ -1,9 +1,9 @@
 // This is a complete version which still needs a view to display
 // const links = require('./data/links.js');
 const WebScraper = require('./lib/web_scraper.js');
-const Chart = require('./lib/hierarchy_chart.js');
 const Mongo = require('./mongoModule');
 const axios = require('axios');
+const SampleData = require('./lib/sample_data.js');
 var express = require('express');
 var path = require('path');
 const dayjs = require('dayjs');
