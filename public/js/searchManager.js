@@ -95,8 +95,6 @@ function setURLValidationStatus(status = URL_RESPONSES.IN_PROGRESS) {
     }
 }
 
-c
-
 function setPastSearchStatus(status = PAST_SEARCH_RESPONSES.IN_PROGRESS) {
     const CHECKING_SEARCH = 'checking_search_text';
     const SEARCH_STATUS_DIV = 'search_status_div';
@@ -172,6 +170,7 @@ async function actOnPastSearchStatus(dbStatus, searchDTO) {
         }
         case PAST_SEARCH_RESPONSES.EXISTS_STALE: {
             //TODO: UPDATE STALE DATA
+            submitChartForm(searchDTO);
             break;
         }
         case PAST_SEARCH_RESPONSES.EXISTS_SHALLOW: {
@@ -184,6 +183,7 @@ async function actOnPastSearchStatus(dbStatus, searchDTO) {
             if (!result.error) {
                 pastSearchManager.setPastSearchCookie(searchDTO.search_url, result._id);
                 setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
+                submitChartForm(searchDTO);
             }
             else {
                 setNewDBEntryStatus(UPDATE_RESULT.FAILURE);

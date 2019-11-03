@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon app.js"
   },
@@ -15,6 +16,7 @@
     "bootstrap": "^4.3.1",
     "cheerio": "^1.0.0-rc.3",
     "compression": "^1.7.4",
+    "crawler": "^1.2.1",
     "d3": "^5.12.0",
     "dayjs": "^1.8.16",
     "ejs": "^2.7.1",
@@ -22,13 +24,15 @@
     "forever": "^1.0.0",
     "forever-monitor": "^1.7.1",
     "jquery": "^3.4.1",
-    "jsdom": "^15.1.1",
+    "jsdom": "^15.2.0",
     "memory-cache": "^0.2.0",
     "mongodb": "^3.3.3",
     "nodemon": "^1.19.3",
     "path": "^0.12.7",
     "req-flash": "0.0.3",
+    "request-promise": "^4.2.4",
     "sass": "^1.23.0",
-    "url-parse": "^1.4.7"
+    "url-parse": "^1.4.7",
+    "watch": "^1.0.2"
   }
 }

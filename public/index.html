@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/graph.css">
 
   <style>
     .top-portion {
@@ -56,8 +57,7 @@
         <div class="col">
 
           <!-- Search Form -->
-
-          <form id="search-form" action="/ctest" method="POST" onsubmit="submitFunction(); return false;" >
+          <form id="search-form" action="/">
             <div class="form-group">
               <input type="url" class="form-control" placeholder="http://" id="search_url" name="search_url" required>
             </div>
@@ -110,27 +110,8 @@
         </div>
       </div>
 
-      <div class="col-8" id="visualization">
-
-        <!-- Visualization -->
-        <button id="setCookieButton">Set Cookie</button>
-        <button id="buildPanelButton">Build Side Panel</button>
-        <button id="buildPastSearchButton">Build Past Searches</button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tutorial_modal">
-          Modal
-        </button>
-
-
-        <div class="row">
-          <div class="wrapper">
-            <svg class="graph" id="tree" width="400" height="200" viewBox="0 0 400 240">
-              <g transform="translate(10,20)">
-                <g class="links"></g>
-                <g class="nodes"></g>
-              </g>
-            </svg>
-          </div>
-        </div>
+      <!-- Visualization -->
+      <div class="col-9" id="visualization">
       </div>
     </div>
   </div>
@@ -138,7 +119,8 @@
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.12.0/d3.min.js"></script> -->
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
