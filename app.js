@@ -1,18 +1,20 @@
 // This is a complete version which still needs a view to display
 // const links = require('./data/links.js');
-const WebScraper = require('./lib/web_scraper.js');
-const Chart = require('./lib/hierarchy_chart.js');
+const WebScraper = require('./lib/webScraper.js');
+const Crawl = require('./lib/crawl.js');
+const SampleData = require('./lib/sampleData.js');
+
 const Mongo = require('./mongoModule');
+const MongoManager = require('./mongoManager');
 const axios = require('axios');
 var express = require('express');
 var path = require('path');
 const dayjs = require('dayjs');
-const MongoManager = require('./mongoManager');
 const PORT = 3000;
 var app = express();
 app.set('port', PORT);
 app.use(express.static('public'));
-app.use(express.json())
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 
 Mongo.connect()
@@ -43,9 +45,24 @@ app.get('/pastSearchesTutorial', (req, res) => {
 // <-- END PARTIALS -->
 
 app.post('/search', (req, res) => {
-  console.log('searching with the following info: ');
-  var webScraper = new WebScraper("http://google.com");
-  webScraper.parsedLinkInfo();
+  var data = req.body;
+  // res.send(SampleData);
+  var webScraper = new WebScraper(data);
+  Crawl.parsedLinkInfo(webScraper, function(scraper) {
+    res.send(scraper.returnJsonData());
+  });
+});
+
+app.get('/scraper', (req, res) => {
+  // data = { search_url: '',
+  //          search_type: 'breadth_search',
+  //          search_depth: '' }
+  var webScraper = new WebScraper(data);
+  Crawl.parsedLinkInfo(webScraper, function(scraper) {
+    res.send(scraper.returnJsonData());
+    console.log(scraper.returnJsonData());
+    console.log('done');
+  });
 });
 
 app.post('/checkURL', async (req, res) => {
