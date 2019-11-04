@@ -1,43 +1,41 @@
 const SAVE_CRAWLER_DATA_URL = '/addCrawlerData';
 
-function submitChartForm(data) {
+async function submitChartForm(data) {
   console.log(JSON.stringify(data));
-  $.ajax({
-    type: 'POST',
-    url: "/search",
-    data: JSON.stringify(data),
-    contentType: 'application/json',
-    success: function(response) {
-      $(".alert").remove();
-      $("svg").remove();
-      console.log('submit chart form: id: ', data._id);
-      //saveCrawlerDataToDB(data._id, response);
-      buildChart(response);
-      // TODO: save the response to the mongo database
-    },
-    error: function() {
-      alert("There was an error crawling the page");
-    }
-  });
-}
+  return new Promise((resolve, reject) => {
 
-function saveCrawlerDataToDB(id, jsonData) {
-  $.post(SAVE_CRAWLER_DATA_URL, {_id: id, crawlerData: jsonData }, (data) => {
-    console.log('saveCrawlerDataToDB: ', data)
+    $.ajax({
+      type: 'POST',
+      url: "/search",
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+      success: function (response) {
+        resolve({
+          data: response,
+          error: null
+        });
+      },
+      error: function () {
+        alert("There was an error crawling the page");
+        reject({
+          data: null,
+          error: 'Error encountered in submitChartForm POST'
+        })
+      }
+    });
   })
-
 }
 
 function buildChart(response) {
   // TODO: move this to the HierarchyChartData class
-  var treeData = [ response ];
+  var treeData = [response];
 
   // TODO: remove the below values and use chartLayout.getLayout()
   var chartLayout = new HierarchyChartLayout();
   // console.log(chartLayout.getLayout());
 
   // ************** Generate the tree diagram	 *****************
-  var margin = {top: 30, right: 120, bottom: 20, left: 300},
+  var margin = { top: 30, right: 120, bottom: 20, left: 300 },
     width = 1060 - margin.right - margin.left,
     height = 700 - margin.top - margin.bottom;
 
@@ -47,7 +45,7 @@ function buildChart(response) {
 
   var tree = d3.layout.tree().size([height, width]);
 
-  var diagonal = d3.svg.diagonal().projection(function(d) { return [d.y, d.x]; });
+  var diagonal = d3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
 
   var svg = d3.select("#visualization").append("svg")
     .attr("width", width + margin.right + margin.left)
@@ -66,39 +64,39 @@ function buildChart(response) {
   function update(source) {
     // Compute the new tree layout.
     var nodes = tree.nodes(root).reverse(),
-        links = tree.links(nodes);
+      links = tree.links(nodes);
 
     // Normalize for fixed-depth.
-    nodes.forEach(function(d) { d.y = d.depth * 180; });
+    nodes.forEach(function (d) { d.y = d.depth * 180; });
 
     // Update the nodes…
-    var node = svg.selectAll("g.node").data(nodes, function(d) { return d.id || (d.id = ++i); });
+    var node = svg.selectAll("g.node").data(nodes, function (d) { return d.id || (d.id = ++i); });
 
     // Enter any new nodes at the parent's previous position.
     var nodeEnter = node.enter().append("g")
       .attr("class", "node")
-      .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+      .attr("transform", function (d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
       .on("click", click);
 
     nodeEnter.append("circle")
       .attr("r", 1e-6)
-      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+      .style("fill", function (d) { return d._children ? "lightsteelblue" : "#fff"; });
 
     nodeEnter.append("text")
-      .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
+      .attr("x", function (d) { return d.children || d._children ? -13 : 13; })
       .attr("dy", ".35em")
-      .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
-      .text(function(d) { return d.title; })
+      .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
+      .text(function (d) { return d.title; })
       .style("fill-opacity", 1e-6);
 
     // Transition nodes to their new position.
     var nodeUpdate = node.transition()
       .duration(duration)
-      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+      .attr("transform", function (d) { return "translate(" + d.y + "," + d.x + ")"; });
 
     nodeUpdate.select("circle")
       .attr("r", 10)
-      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+      .style("fill", function (d) { return d._children ? "lightsteelblue" : "#fff"; });
 
     nodeUpdate.select("text")
       .style("fill-opacity", 1);
@@ -106,7 +104,7 @@ function buildChart(response) {
     // Transition exiting nodes to the parent's new position.
     var nodeExit = node.exit().transition()
       .duration(duration)
-      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+      .attr("transform", function (d) { return "translate(" + source.y + "," + source.x + ")"; })
       .remove();
 
     nodeExit.select("circle")
@@ -117,14 +115,14 @@ function buildChart(response) {
 
     // Update the links…
     var link = svg.selectAll("path.link")
-      .data(links, function(d) { return d.target.id; });
+      .data(links, function (d) { return d.target.id; });
 
     // Enter any new links at the parent's previous position.
     link.enter().insert("path", "g")
       .attr("class", "link")
-      .attr("d", function(d) {
-        var o = {x: source.x0, y: source.y0};
-        return diagonal({source: o, target: o});
+      .attr("d", function (d) {
+        var o = { x: source.x0, y: source.y0 };
+        return diagonal({ source: o, target: o });
       });
 
     // Transition links to their new position.
@@ -135,14 +133,14 @@ function buildChart(response) {
     // Transition exiting nodes to the parent's new position.
     link.exit().transition()
       .duration(duration)
-      .attr("d", function(d) {
-        var o = {x: source.x, y: source.y};
-        return diagonal({source: o, target: o});
+      .attr("d", function (d) {
+        var o = { x: source.x, y: source.y };
+        return diagonal({ source: o, target: o });
       })
       .remove();
 
     // Stash the old positions for transition.
-    nodes.forEach(function(d) {
+    nodes.forEach(function (d) {
       d.x0 = d.x;
       d.y0 = d.y;
     });
@@ -154,7 +152,7 @@ function buildChart(response) {
       d._children = d.children;
       d.children = null;
     } else {
-  d.children = d._children;
+      d.children = d._children;
       d._children = null;
     }
     update(d);

@@ -115,7 +115,6 @@ app.post('/pastSearchByID', async (req, res) => {
 });
 
 app.post('/newDBEntry', async (req, res) => {
-
   let mongoDTO = createDTO(req.body);
   if (mongoDTO === null) {
     res.sendStatus(400);
@@ -153,11 +152,13 @@ async function checkURL(url) {
 }
 
 function createDTO(reqBody) {
+  console.log('createDTO: ', reqBody);
 
   return {
     url: reqBody.search_url,
     search_type: reqBody.search_type,
     depth: reqBody.search_depth,
-    date: dayjs().format()
+    date: dayjs().format(),
+    crawlerData: reqBody.crawlerData
   }
 }

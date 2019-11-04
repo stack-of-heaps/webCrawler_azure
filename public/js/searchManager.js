@@ -54,7 +54,7 @@ export async function crawlerRequest(event) {
     let pastSearchStatus = getPastSearchInfo(pastSearch, searchDTO);
 
     setPastSearchStatus(pastSearchStatus);
-    actOnPastSearchStatus(pastSearchStatus, searchDTO);
+    actOnPastSearchStatus(pastSearchStatus, pastSearch, searchDTO);
 
 }
 
@@ -99,7 +99,6 @@ function setPastSearchStatus(status = PAST_SEARCH_RESPONSES.IN_PROGRESS) {
     const CHECKING_SEARCH = 'checking_search_text';
     const SEARCH_STATUS_DIV = 'search_status_div';
     let validatingElement = document.getElementById(CHECKING_SEARCH);
-    console.log('validating element: ', validatingElement);
 
     if (!validatingElement) {
         createStatusElement(SEARCH_STATUS_DIV, CHECKING_SEARCH, PAST_SEARCH_RESPONSES);
@@ -161,7 +160,7 @@ function getPastSearchInfo(dbCheck, searchDTO) {
     }
 }
 
-async function actOnPastSearchStatus(dbStatus, searchDTO) {
+async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
 
     switch (dbStatus) {
         case PAST_SEARCH_RESPONSES.EXISTS_FRESH: {
@@ -180,12 +179,16 @@ async function actOnPastSearchStatus(dbStatus, searchDTO) {
         }
         case PAST_SEARCH_RESPONSES.NOT_EXIST: {
             setNewDBEntryStatus();
-            let result = await createDBEntry(searchDTO);
-            searchDTO._id = dbStatus._id;
-            if (!result.error) {
+            const chartData = await submitChartForm(searchDTO);
+
+            if (!chartData.error) {
+                searchDTO.crawlerData = JSON.stringify(chartData.data);
+                let result = createDBEntry(searchDTO);
+
                 pastSearchManager.setPastSearchCookie(searchDTO.search_url, result._id);
                 setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
-                submitChartForm(searchDTO);
+                clearScreen();
+                buildChart(chartData.data);
             }
             else {
                 setNewDBEntryStatus(UPDATE_RESULT.FAILURE);
@@ -201,13 +204,12 @@ async function createDBEntry(searchDTO) {
     let postResponse = await $.post(NEWENTRYURL, {
         search_url: searchDTO.search_url,
         search_depth: searchDTO.search_depth,
-        search_type: searchDTO.search_type
+        search_type: searchDTO.search_type,
+        crawlerData: searchDTO.crawlerData
     });
 
     return postResponse;
 }
-
-
 
 function setNewDBEntryStatus(createResult = UPDATE_RESULT.IN_PROGRESS) {
     const DB_CREATE_STATUS = 'newDBEntry_url';
@@ -285,4 +287,9 @@ function dataIsStale(dbResult) {
     let difference = dateNow - entryDate;
 
     return difference > MAX_HOURS ? true : false;
+}
+
+function clearScreen() {
+  $(".alert").remove();
+  $("svg").remove();
 }
