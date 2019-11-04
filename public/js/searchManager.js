@@ -170,16 +170,18 @@ async function actOnPastSearchStatus(dbStatus, searchDTO) {
         }
         case PAST_SEARCH_RESPONSES.EXISTS_STALE: {
             //TODO: UPDATE STALE DATA
-            submitChartForm(searchDTO);
+            let id = dbStatus._id;
             break;
         }
         case PAST_SEARCH_RESPONSES.EXISTS_SHALLOW: {
             //TODO: UPDATE SHALLOW DATA
+            setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
             break;
         }
         case PAST_SEARCH_RESPONSES.NOT_EXIST: {
             setNewDBEntryStatus();
             let result = await createDBEntry(searchDTO);
+            searchDTO._id = dbStatus._id;
             if (!result.error) {
                 pastSearchManager.setPastSearchCookie(searchDTO.search_url, result._id);
                 setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);

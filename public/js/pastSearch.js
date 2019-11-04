@@ -80,11 +80,9 @@ function buildSearchEntry(url, id) {
     newAHref.setAttribute('id', id);
     newAHref.setAttribute('href', '#');
     newAHref.setAttribute('role', 'button');
-    newAHref.setAttribute('class', 'col btn btn-sm btn-outline-light');
+    newAHref.setAttribute('class', 'col text-white past-search' );
     newAHref.innerText = url;
     newTD.appendChild(newAHref);
-    newTR.appendChild(newTD);
-    newTR.appendChild(newTD);
     newTR.appendChild(newTD);
 
     newAHref.addEventListener('click', function () { handlePastSearchClick(id) });

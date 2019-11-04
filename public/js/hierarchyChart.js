@@ -1,3 +1,5 @@
+const SAVE_CRAWLER_DATA_URL = '/addCrawlerData';
+
 function submitChartForm(data) {
   console.log(JSON.stringify(data));
   $.ajax({
@@ -8,6 +10,8 @@ function submitChartForm(data) {
     success: function(response) {
       $(".alert").remove();
       $("svg").remove();
+      console.log('submit chart form: id: ', data._id);
+      //saveCrawlerDataToDB(data._id, response);
       buildChart(response);
       // TODO: save the response to the mongo database
     },
@@ -15,6 +19,13 @@ function submitChartForm(data) {
       alert("There was an error crawling the page");
     }
   });
+}
+
+function saveCrawlerDataToDB(id, jsonData) {
+  $.post(SAVE_CRAWLER_DATA_URL, {_id: id, crawlerData: jsonData }, (data) => {
+    console.log('saveCrawlerDataToDB: ', data)
+  })
+
 }
 
 function buildChart(response) {

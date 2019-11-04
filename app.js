@@ -115,6 +115,7 @@ app.post('/pastSearchByID', async (req, res) => {
 });
 
 app.post('/newDBEntry', async (req, res) => {
+
   let mongoDTO = createDTO(req.body);
   if (mongoDTO === null) {
     res.sendStatus(400);
@@ -122,7 +123,20 @@ app.post('/newDBEntry', async (req, res) => {
   let mongoResult = await MongoManager.createNewEntry(mongoDTO);
   console.log('newDBEntry mongoResult: ', mongoResult);
   res.send(mongoResult);
+})
 
+app.post('/addCrawlerData', async (req, res) => {
+
+  let mongoID = req._id;
+  if (mongoID === null) {
+    console.error('updateDBEntry: passed in _id is null: ', mongoID);
+    res.sendStatus(400);
+  }
+  
+  let crawlerData = req.crawlerData;
+  let mongoResult = await MongoManager.updateEntryJSON(mongoID, crawlerData);
+  console.log('addCrawlerData mongoResult: ', mongoResult);
+  res.send(mongoResult);
 })
 
 app.listen(app.get('port'));

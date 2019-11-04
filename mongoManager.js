@@ -96,10 +96,28 @@ module.exports.createNewEntry = async (mongoDTO) => {
     })
 }
 
+module.exports.updateEntryJSON = async (id, crawlerData) => {
+    let objectID = new ObjectID(id);
+    console.log('updateentryjson: crawlerData', cralwerData);
+
+    return new Promise((resolve, reject) => {
+
+        const collection = Mongo.getCollection()
+        collection.updateOne(objectID, crawlerData, (err, res) => {
+            if (err) {
+                console.error('UpdateEntryJSON: ', err);
+                reject(err);
+            }
+            else {
+                console.log('Added JSON data to entry with id: ', id);
+                resolve(res);
+            }
+        })
+    })
+}
+
 module.exports.updateEntryDate = async (id) => {
-
     let currentDate = dayjs().format();
-
 }
 
 module.exports.updateEntryJSON = (id) => {
