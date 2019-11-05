@@ -1,16 +1,14 @@
 <script>
     $('#inspect_results-header').click(function () { $('#inspect_results-content').collapse('toggle') });
 </script>
-<h6 style="cursor: pointer;" id="inspect_results-header" class="text-white bg-danger p-1 m-0 rounded"><strong>Inspect Results</strong></h6>
+<h6 style="cursor: pointer;" id="inspect_results-header" class="text-white bg-danger p-1 m-0 rounded"><strong>Inspect
+        Results</strong></h6>
 <div id="inspect_results-accordion" class="accordion">
 
-    <div id="inspect_results-content" class="collapse show" data-parent="#inspect_results-accordion">
+    <div id="col inspect_results-content" class="collapse show" data-parent="#inspect_results-accordion">
         <div class="input-group-sm">
             <select class="custom-select" id="jump-to-depth">
                 <option selected>Jump to depth...</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
             </select>
         </div>
 
@@ -18,9 +16,6 @@
         <div class="input-group-sm">
             <select class="custom-select" id="highlight-element">
                 <option selected>Highlight elements...</option>
-                <option value="1">Links</option>
-                <option value="2">Images</option>
-                <option value="3">SEO</option>
             </select>
             <!-- Jump to Depth -->
 
@@ -28,7 +23,7 @@
         </div>
 
         <!-- Element Table -->
-        <table class="table table-dark table-sm table-bordered compact-text" id="highlight-element-table">
+        <table class="inspect-table table table-dark table-sm table-bordered compact-text" id="highlight-element-table">
             <thead class="thead bg-info">
                 <tr>
                     <th class="border-0">#</th>
@@ -37,21 +32,6 @@
                 </tr>
             </thead>
             <tbody id="highlight-element-tbody">
-                <tr>
-                    <td class="text-white">1</td>
-                    <td class="text-white">http://www.oregonstate.edu</td>
-                    <td class="text-white">Home</td>
-                </tr>
-                <tr>
-                    <td class="text-white">2</td>
-                    <td class="text-white">http://www.oregonstate.edu/sports</td>
-                    <td class="text-white">Sports</td>
-                </tr>
-                <tr>
-                    <td class="text-white">3</td>
-                    <td class="text-white">http://www.oregonstate.edu/login</td>
-                    <td class="text-white">Login</td>
-                </tr>
             </tbody>
         </table>
     </div>
