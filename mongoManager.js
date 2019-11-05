@@ -96,20 +96,19 @@ module.exports.createNewEntry = async (mongoDTO) => {
     })
 }
 
-module.exports.updateEntryJSON = async (id, crawlerData) => {
+module.exports.updateCrawlerData = async (id, mongoDTO) => {
     let objectID = new ObjectID(id);
-    console.log('updateentryjson: crawlerData', cralwerData);
+    var update = { $set: {crawlerData: JSON.stringify(mongoDTO.crawlerData), date: mongoDTO.date, depth: mongoDTO.search_depth }};
 
     return new Promise((resolve, reject) => {
 
         const collection = Mongo.getCollection()
-        collection.updateOne(objectID, crawlerData, (err, res) => {
+        collection.updateOne(objectID, update, (err, res) => {
             if (err) {
                 console.error('UpdateEntryJSON: ', err);
                 reject(err);
             }
             else {
-                console.log('Added JSON data to entry with id: ', id);
                 resolve(res);
             }
         })
@@ -118,10 +117,6 @@ module.exports.updateEntryJSON = async (id, crawlerData) => {
 
 module.exports.updateEntryDate = async (id) => {
     let currentDate = dayjs().format();
-}
-
-module.exports.updateEntryJSON = (id) => {
-
 }
 
 module.exports.getAllSearches = async () => {

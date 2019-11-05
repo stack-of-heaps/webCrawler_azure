@@ -48,7 +48,7 @@ app.post('/search', (req, res) => {
   var data = req.body;
   // res.send(SampleData);
   var webScraper = new WebScraper(data);
-  Crawl.parsedLinkInfo(webScraper, function(scraper) {
+  Crawl.parsedLinkInfo(webScraper, function (scraper) {
     res.send(scraper.returnJsonData());
   });
 });
@@ -58,10 +58,8 @@ app.get('/scraper', (req, res) => {
   //          search_type: 'breadth_search',
   //          search_depth: '' }
   var webScraper = new WebScraper(data);
-  Crawl.parsedLinkInfo(webScraper, function(scraper) {
+  Crawl.parsedLinkInfo(webScraper, function (scraper) {
     res.send(scraper.returnJsonData());
-    console.log(scraper.returnJsonData());
-    console.log('done');
   });
 });
 
@@ -85,7 +83,6 @@ app.post('/pastSearchByURL', async (req, res) => {
 
   try {
     let response = await MongoManager.findPastSearchByURL(url);
-    console.log('pastSearchByURL response: ', response);
     if (response === null) {
       response = { _id: null }
     }
@@ -120,22 +117,37 @@ app.post('/newDBEntry', async (req, res) => {
     res.sendStatus(400);
   }
   let mongoResult = await MongoManager.createNewEntry(mongoDTO);
-  console.log('newDBEntry mongoResult: ', mongoResult);
   res.send(mongoResult);
 })
 
-app.post('/addCrawlerData', async (req, res) => {
+app.post('/updateCrawlerData', async (req, res) => {
 
-  let mongoID = req._id;
+  let data = req.body;
+  let mongoID = data._id;
+  let newDepth = data.search_depth;
   if (mongoID === null) {
-    console.error('updateDBEntry: passed in _id is null: ', mongoID);
+    console.error('updateCrawlerData: passed in _id is null');
     res.sendStatus(400);
   }
-  
-  let crawlerData = req.crawlerData;
-  let mongoResult = await MongoManager.updateEntryJSON(mongoID, crawlerData);
-  console.log('addCrawlerData mongoResult: ', mongoResult);
-  res.send(mongoResult);
+
+  var webScraper = new WebScraper(data);
+  Crawl.parsedLinkInfo(webScraper, function (scraper) {
+    let mongoDTO = {
+      depth: newDepth,
+      crawlerData: JSON.stringify(scraper.returnJsonData()),
+      date: Date.now
+    }
+
+    console.log('updateralwerData id: ', mongoID);
+    MongoManager.updateCrawlerData(mongoID, mongoDTO);
+    res.send(scraper.returnJsonData());
+  });
+})
+
+app.get('/getPastSearch', async (req, res) => {
+  let id = req.query.id;
+  let search = await MongoManager.findPastSearchById(id);
+  res.send(search);
 })
 
 app.listen(app.get('port'));
@@ -152,7 +164,6 @@ async function checkURL(url) {
 }
 
 function createDTO(reqBody) {
-  console.log('createDTO: ', reqBody);
 
   return {
     url: reqBody.search_url,

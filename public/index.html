@@ -33,6 +33,11 @@
     .alert {
       width: 50%;
     }
+
+    .inspect-table {
+      table-layout: fixed;
+      word-wrap: break-word;
+    }
   </style>
 
   <title>Graphical Web Crawler</title>
@@ -74,21 +79,24 @@
               <div class="col-auto">
                 <div clas="form-group">
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" id="depth_search" name="search_type" value="depth_search" checked>
+                    <input type="radio" class="form-check-input" id="depth_search" name="search_type"
+                      value="depth_search" checked>
                     <label class="form-check-label text-white" for="depth_search"><strong>Depth-First
                         Search</strong></label>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="form-check">
-                    <input type="radio" class="form-check-input" id="breadth_search" name="search_type" value="breadth_search">
+                    <input type="radio" class="form-check-input" id="breadth_search" name="search_type"
+                      value="breadth_search">
                     <label class="form-check-label text-white" for="breadth_search"><strong>Breadth-First
                         Search</strong></label>
                   </div>
                 </div>
               </div>
               <div class="form-group col-auto">
-                <input type="number" class="form-control" id="search_depth" name="search_depth" placeholder="Depth" min="1">
+                <input type="number" class="form-control" id="search_depth" name="search_depth" placeholder="Depth"
+                  min="1">
               </div>
               <div class="col">
 

@@ -1,0 +1,673 @@
+{
+    "id": 1,
+    "status": 200,
+    "title": "xkcd: Screen Time",
+    "url": {
+        "href": "http://www.xkcd.com",
+        "protocol": "http:",
+        "origin": "http://www.xkcd.com",
+        "port": 80,
+        "host": "www.xkcd.com",
+        "favicon": "favicon.ico"
+    },
+    "children": [
+        {
+            "id": 2,
+            "status": 200,
+            "title": "Archive",
+            "url": {
+                "href": "http://www.xkcd.com/archive",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 3,
+            "status": 200,
+            "title": "What If?",
+            "url": {
+                "href": "http://what-if.xkcd.com",
+                "protocol": "http:",
+                "origin": "http://what-if.xkcd.com",
+                "port": 80,
+                "host": "what-if.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 4,
+            "status": 200,
+            "title": "Blag",
+            "url": {
+                "href": "http://blag.xkcd.com",
+                "protocol": "http:",
+                "origin": "http://blag.xkcd.com",
+                "port": 80,
+                "host": "blag.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 5,
+            "status": 200,
+            "title": "How To",
+            "url": {
+                "href": "http://www.xkcd.com/how-to/",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 6,
+            "status": 200,
+            "title": "Store",
+            "url": {
+                "href": "http://store.xkcd.com/",
+                "protocol": "http:",
+                "origin": "http://store.xkcd.com",
+                "port": 80,
+                "host": "store.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 7,
+            "status": 200,
+            "title": "About",
+            "url": {
+                "href": "http://www.xkcd.com/about",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 8,
+            "status": 200,
+            "title": "Feed",
+            "url": {
+                "href": "http://www.xkcd.com/atom.xml",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 9,
+            "status": 200,
+            "title": "Email",
+            "url": {
+                "href": "http://www.xkcd.com/newsletter/",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 10,
+            "status": 200,
+            "title": "",
+            "url": {
+                "href": "/",
+                "protocol": "",
+                "origin": "null",
+                "port": 80,
+                "host": "",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 11,
+            "status": 200,
+            "title": "",
+            "url": {
+                "href": "http://www.xkcd.com//xkcd.com/how-to/",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 12,
+            "status": 200,
+            "title": "Amazon",
+            "url": {
+                "href": "https://www.amazon.com/How-Absurd-Scientific-Real-World-Problems/dp/0525537090/",
+                "protocol": "https:",
+                "origin": "https://www.amazon.com",
+                "port": 443,
+                "host": "www.amazon.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 13,
+            "status": 200,
+            "title": "B&N",
+            "url": {
+                "href": "http://links.penguinrandomhouse.com/type/affiliate/isbn/9780525537090/siteID/8001/retailerid/2/trackingcode/PRH5522E62429",
+                "protocol": "http:",
+                "origin": "http://links.penguinrandomhouse.com",
+                "port": 80,
+                "host": "links.penguinrandomhouse.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 14,
+            "status": 200,
+            "title": "B&N Exclusive Edition",
+            "url": {
+                "href": "https://www.barnesandnoble.com/w/how-to-randall-munroe/1130494832?ean=9780525686910#/",
+                "protocol": "https:",
+                "origin": "https://www.barnesandnoble.com",
+                "port": 443,
+                "host": "www.barnesandnoble.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 15,
+            "status": 200,
+            "title": "IndieBound",
+            "url": {
+                "href": "http://links.penguinrandomhouse.com/type/affiliate/isbn/9780525537090/siteID/8001/retailerid/6/trackingcode/penguinrandom",
+                "protocol": "http:",
+                "origin": "http://links.penguinrandomhouse.com",
+                "port": 80,
+                "host": "links.penguinrandomhouse.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 16,
+            "status": 200,
+            "title": "Apple",
+            "url": {
+                "href": "https://itunes.apple.com/us/book/how-to/id1451461524?mt=11",
+                "protocol": "https:",
+                "origin": "https://itunes.apple.com",
+                "port": 443,
+                "host": "itunes.apple.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 17,
+            "status": 200,
+            "title": "Audible",
+            "url": {
+                "href": "https://www.audible.com/search?advsearchKeywords=How+To+Randall+Munroe&source_code=COMA0213WS031709&SID=PRHA9A5E24CFB--9780525635680",
+                "protocol": "https:",
+                "origin": "https://www.audible.com",
+                "port": 443,
+                "host": "www.audible.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 18,
+            "status": 200,
+            "title": "Target",
+            "url": {
+                "href": "http://links.penguinrandomhouse.com/type/affiliate/isbn/9780525537090/siteID/8001/retailerid/23/trackingcode/PRH3D17167A3B",
+                "protocol": "http:",
+                "origin": "http://links.penguinrandomhouse.com",
+                "port": 80,
+                "host": "links.penguinrandomhouse.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 19,
+            "status": 200,
+            "title": "|<",
+            "url": {
+                "href": "http://www.xkcd.com/1/",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 20,
+            "status": 200,
+            "title": "< Prev",
+            "url": {
+                "href": "http://www.xkcd.com/2222/",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 21,
+            "status": 200,
+            "title": "Random",
+            "url": {
+                "href": "http://www.xkcd.com//c.xkcd.com/random/comic/",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 22,
+            "status": 200,
+            "title": "Next >",
+            "url": {
+                "href": "#",
+                "protocol": "",
+                "origin": "null",
+                "port": 80,
+                "host": "",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 23,
+            "status": 200,
+            "title": ">|",
+            "url": {
+                "href": "/",
+                "protocol": "",
+                "origin": "null",
+                "port": 80,
+                "host": "",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 24,
+            "status": 200,
+            "title": "|<",
+            "url": {
+                "href": "http://www.xkcd.com/1/",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 25,
+            "status": 200,
+            "title": "< Prev",
+            "url": {
+                "href": "http://www.xkcd.com/2222/",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 26,
+            "status": 200,
+            "title": "Random",
+            "url": {
+                "href": "http://www.xkcd.com//c.xkcd.com/random/comic/",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 27,
+            "status": 200,
+            "title": "Next >",
+            "url": {
+                "href": "#",
+                "protocol": "",
+                "origin": "null",
+                "port": 80,
+                "host": "",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 28,
+            "status": 200,
+            "title": ">|",
+            "url": {
+                "href": "/",
+                "protocol": "",
+                "origin": "null",
+                "port": 80,
+                "host": "",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 29,
+            "status": 200,
+            "title": "",
+            "url": {
+                "href": "http://www.xkcd.com//xkcd.com/1732/",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 30,
+            "status": 200,
+            "title": "RSS Feed",
+            "url": {
+                "href": "http://www.xkcd.com/rss.xml",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 31,
+            "status": 200,
+            "title": "Atom Feed",
+            "url": {
+                "href": "http://www.xkcd.com/atom.xml",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 32,
+            "status": 200,
+            "title": "Email",
+            "url": {
+                "href": "http://www.xkcd.com/newsletter/",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 33,
+            "status": 200,
+            "title": "Three Word Phrase",
+            "url": {
+                "href": "http://threewordphrase.com/",
+                "protocol": "http:",
+                "origin": "http://threewordphrase.com",
+                "port": 80,
+                "host": "threewordphrase.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 34,
+            "status": 200,
+            "title": "SMBC",
+            "url": {
+                "href": "http://www.smbc-comics.com/",
+                "protocol": "http:",
+                "origin": "http://www.smbc-comics.com",
+                "port": 80,
+                "host": "www.smbc-comics.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 35,
+            "status": 200,
+            "title": "Dinosaur Comics",
+            "url": {
+                "href": "http://www.qwantz.com",
+                "protocol": "http:",
+                "origin": "http://www.qwantz.com",
+                "port": 80,
+                "host": "www.qwantz.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 36,
+            "status": 200,
+            "title": "Oglaf",
+            "url": {
+                "href": "http://oglaf.com/",
+                "protocol": "http:",
+                "origin": "http://oglaf.com",
+                "port": 80,
+                "host": "oglaf.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 37,
+            "status": 200,
+            "title": "A Softer World",
+            "url": {
+                "href": "http://www.asofterworld.com",
+                "protocol": "http:",
+                "origin": "http://www.asofterworld.com",
+                "port": 80,
+                "host": "www.asofterworld.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 38,
+            "status": 200,
+            "title": "Buttersafe",
+            "url": {
+                "href": "http://buttersafe.com/",
+                "protocol": "http:",
+                "origin": "http://buttersafe.com",
+                "port": 80,
+                "host": "buttersafe.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 39,
+            "status": 200,
+            "title": "Perry Bible Fellowship",
+            "url": {
+                "href": "http://pbfcomics.com/",
+                "protocol": "http:",
+                "origin": "http://pbfcomics.com",
+                "port": 80,
+                "host": "pbfcomics.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 40,
+            "status": 200,
+            "title": "Questionable Content",
+            "url": {
+                "href": "http://questionablecontent.net/",
+                "protocol": "http:",
+                "origin": "http://questionablecontent.net",
+                "port": 80,
+                "host": "questionablecontent.net",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 41,
+            "status": 200,
+            "title": "Buttercup Festival",
+            "url": {
+                "href": "http://www.buttercupfestival.com/",
+                "protocol": "http:",
+                "origin": "http://www.buttercupfestival.com",
+                "port": 80,
+                "host": "www.buttercupfestival.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 42,
+            "status": 200,
+            "title": "Homestuck",
+            "url": {
+                "href": "http://www.mspaintadventures.com/?s=6&p=001901",
+                "protocol": "http:",
+                "origin": "http://www.mspaintadventures.com",
+                "port": 80,
+                "host": "www.mspaintadventures.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 43,
+            "status": 200,
+            "title": "Junior Scientist Power Hour",
+            "url": {
+                "href": "http://www.jspowerhour.com/",
+                "protocol": "http:",
+                "origin": "http://www.jspowerhour.com",
+                "port": 80,
+                "host": "www.jspowerhour.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 44,
+            "status": 200,
+            "title": "Tips on technology and government",
+            "url": {
+                "href": "https://medium.com/civic-tech-thoughts-from-joshdata/so-you-want-to-reform-democracy-7f3b1ef10597",
+                "protocol": "https:",
+                "origin": "https://medium.com",
+                "port": 443,
+                "host": "medium.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 45,
+            "status": 200,
+            "title": "Climate FAQ",
+            "url": {
+                "href": "https://www.nytimes.com/interactive/2017/climate/what-is-climate-change.html",
+                "protocol": "https:",
+                "origin": "https://www.nytimes.com",
+                "port": 443,
+                "host": "www.nytimes.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 46,
+            "status": 200,
+            "title": "Katharine Hayhoe",
+            "url": {
+                "href": "https://twitter.com/KHayhoe",
+                "protocol": "https:",
+                "origin": "https://twitter.com",
+                "port": 443,
+                "host": "twitter.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 47,
+            "status": 200,
+            "title": "Creative Commons Attribution-NonCommercial 2.5 License",
+            "url": {
+                "href": "http://creativecommons.org/licenses/by-nc/2.5/",
+                "protocol": "http:",
+                "origin": "http://creativecommons.org",
+                "port": 80,
+                "host": "creativecommons.org",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        },
+        {
+            "id": 48,
+            "status": 200,
+            "title": "More details",
+            "url": {
+                "href": "http://www.xkcd.com/license.html",
+                "protocol": "http:",
+                "origin": "http://www.xkcd.com",
+                "port": 80,
+                "host": "www.xkcd.com",
+                "favicon": "favicon.ico"
+            },
+            "children": []
+        }
+    ]
+}

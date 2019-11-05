@@ -1,5 +1,3 @@
-const SAVE_CRAWLER_DATA_URL = '/addCrawlerData';
-
 async function submitChartForm(data) {
   console.log(JSON.stringify(data));
   return new Promise((resolve, reject) => {
@@ -27,6 +25,8 @@ async function submitChartForm(data) {
 }
 
 function buildChart(response) {
+
+  clearScreen();
   // TODO: move this to the HierarchyChartData class
   var treeData = [response];
 
@@ -157,4 +157,9 @@ function buildChart(response) {
     }
     update(d);
   }
+}
+
+function clearScreen() {
+  $(".alert").remove();
+  $("svg").remove();
 }

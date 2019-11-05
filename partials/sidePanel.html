@@ -1,10 +1,11 @@
 <script>
     $('#inspect_results-header').click(function () { $('#inspect_results-content').collapse('toggle') });
 </script>
-<h6 style="cursor: pointer;" id="inspect_results-header" class="text-white bg-danger p-1 m-0 rounded"><strong>Inspect Results</strong></h6>
+<h6 style="cursor: pointer;" id="inspect_results-header" class="text-white bg-danger p-1 m-0 rounded"><strong>Inspect
+        Results</strong></h6>
 <div id="inspect_results-accordion" class="accordion">
 
-    <div id="inspect_results-content" class="collapse show" data-parent="#inspect_results-accordion">
+    <div id="col inspect_results-content" class="collapse show" data-parent="#inspect_results-accordion">
         <div class="input-group-sm">
             <select class="custom-select" id="jump-to-depth">
                 <option selected>Jump to depth...</option>
@@ -22,7 +23,7 @@
         </div>
 
         <!-- Element Table -->
-        <table class="table table-dark table-sm table-bordered compact-text" id="highlight-element-table">
+        <table class="inspect-table table table-dark table-sm table-bordered compact-text" id="highlight-element-table">
             <thead class="thead bg-info">
                 <tr>
                     <th class="border-0">#</th>

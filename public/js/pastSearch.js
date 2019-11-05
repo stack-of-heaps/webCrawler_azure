@@ -1,4 +1,4 @@
-const PAST_SEARCH_BY_ID_URL = '/pastSearchById'
+const GETPASTSEARCHURL = '/getPastSearch';
 
 window.onload = function () {
     let pastSearches = getPastSearches();
@@ -61,7 +61,7 @@ function buildPastSearchTable() {
 
 
     pastSearches.forEach(search => {
-        
+
         let values = search.split('=');
         let id = values[0];
         let url = values[1];
@@ -80,7 +80,7 @@ function buildSearchEntry(url, id) {
     newAHref.setAttribute('id', id);
     newAHref.setAttribute('href', '#');
     newAHref.setAttribute('role', 'button');
-    newAHref.setAttribute('class', 'col text-white past-search' );
+    newAHref.setAttribute('class', 'col text-white past-search');
     newAHref.innerText = url;
     newTD.appendChild(newAHref);
     newTR.appendChild(newTD);
@@ -90,15 +90,14 @@ function buildSearchEntry(url, id) {
     return newTR;
 }
 
-function handlePastSearchClick(id) {
-    console.log("id: ", id);
-    $.post(PAST_SEARCH_BY_ID_URL, { id: id }, (data) => {
-        console.log(data);
-        displayPastSearchInfo(data);
+async function handlePastSearchClick(id) {
+    console.log('past search id: ', id);
+    $.get(GETPASTSEARCHURL, { id: id }, (searchData) => {
+        displayPastSearchInfo(searchData);
     })
 }
 
-function displayPastSearchInfo(search) {
+function displayPastSearchInfo(searchData) {
 
     let visDiv = document.getElementById('visualization');
     let statusDiv = document.createElement('div');
@@ -106,9 +105,14 @@ function displayPastSearchInfo(search) {
     statusDiv.setAttribute('role', 'alert');
 
     let statusH = document.createElement('h6');
-    statusH.innerText = `Found search with the following attributes: id: ${search._id}, date: ${search.date}, depth: ${search.depth}, url: ${search.url}`;
+    statusH.innerText = 'Please wait. Fetching data...';
 
     statusDiv.appendChild(statusH);
     visDiv.appendChild(statusDiv);
 
+    clearScreen();
+
+    buildChart(JSON.parse(searchData.crawlerData));
+
 }
+
