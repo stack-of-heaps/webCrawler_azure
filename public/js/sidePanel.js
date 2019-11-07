@@ -32,17 +32,22 @@ function buildSidePanelElements(crawlerData) {
         let newTR = document.createElement('tr');
         let numTD = document.createElement('td');
         numTD.innerText = index;
+        numTD.setAttribute('class', 'text-center align-middle');
         newTR.appendChild(numTD);
 
         let urlTD = document.createElement('td');
         urlTD.setAttribute('colspan', '2');
+        urlTD.setAttribute('class', 'text-left align-middle');
         let href = document.createElement('a');
         href.setAttribute('href', link.url.href);
+        href.setAttribute('class', 'text-light');
         href.innerText = link.url.href;
         urlTD.appendChild(href);
         newTR.appendChild(urlTD);
 
         let urlTextTD = document.createElement('td');
+        urlTextTD.setAttribute('class', 'text-center align-middle');
+
         urlTextTD.innerText = link.title;
         newTR.appendChild(urlTextTD);
 
