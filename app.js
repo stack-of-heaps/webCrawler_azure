@@ -135,12 +135,17 @@ app.post('/updateCrawlerData', async (req, res) => {
     let mongoDTO = {
       depth: newDepth,
       crawlerData: JSON.stringify(scraper.returnJsonData()),
-      date: Date.now
+      date: dayjs().format()
     }
 
-    console.log('updateralwerData id: ', mongoID);
-    MongoManager.updateCrawlerData(mongoID, mongoDTO);
-    res.send(scraper.returnJsonData());
+    console.log('updating DB entry');
+    const result = MongoManager.updateCrawlerData(mongoID, mongoDTO);
+    console.log('between updated and inside then');
+    result.then(data => {
+      console.log('inside then');
+      res.send(scraper.returnJsonData())
+    }
+    )
   });
 })
 

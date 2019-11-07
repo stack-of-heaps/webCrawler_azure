@@ -39,8 +39,8 @@ export async function crawlerRequest(event) {
     setURLValidationStatus();
 
     let searchDTO = createSearchDTO();
-    let url = searchDTO.search_url;
 
+    let url = searchDTO.search_url;
     let urlResponse = await $.post(CHECKURL, { url: url });
 
     if (urlResponse.status >= 200 && urlResponse.status <= 299) {
@@ -164,30 +164,29 @@ function getPastSearchInfo(dbCheck, searchDTO) {
 }
 
 async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
-    console.log('act on past search: ', pastSearch);
 
     switch (dbStatus) {
         case PAST_SEARCH_RESPONSES.EXISTS_FRESH: {
-            //TODO: RETURN SEARCH DATA
             setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
             const pastSearch = await fetchPastSearchByURL(searchDTO.search_url);
             buildChart(JSON.parse(pastSearch.crawlerData));
             break;
         }
         case PAST_SEARCH_RESPONSES.EXISTS_STALE: {
-            //TODO: UPDATE STALE DATA
+            searchDTO._id = pastSearch._id;
+            const chartData = await updateCrawlerDepth(searchDTO);
+            setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
+            buildChart(chartData);
+            sidePanelManager.buildSidePanel().then(done => sidePanelManager.populateSidePanel(chartData));
+
             break;
         }
         case PAST_SEARCH_RESPONSES.EXISTS_SHALLOW: {
-            //TODO: UPDATE SHALLOW DATA
-            setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
-            /*
             searchDTO._id = pastSearch._id;
-            console.log('updatecrawlerdepth dto: ', searchDTO);
-            let chartData = updateCrawlerDepth(searchDTO);
-            buildChart(chartData.data);
-            sidePanelManager.buildSidePanel().then(done => sidePanelManager.populateSidePanel(chartData.data));
-            */
+            const chartData = await updateCrawlerDepth(searchDTO);
+            setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
+            buildChart(chartData);
+            sidePanelManager.buildSidePanel().then(done => sidePanelManager.populateSidePanel(chartData));
 
             break;
         }
@@ -216,7 +215,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
 
 async function updateCrawlerDepth(searchDTO) {
 
-    let postResponse = await $.post(UPDATEPASTSEARCHURL, {
+    const postRequest = await $.post(UPDATEPASTSEARCHURL, {
         _id: searchDTO._id,
         search_url: searchDTO.search_url,
         search_depth: searchDTO.search_depth,
@@ -224,7 +223,9 @@ async function updateCrawlerDepth(searchDTO) {
         crawlerData: searchDTO.crawlerData
     });
 
+    const postResponse = await postRequest;
     return postResponse;
+
 }
 
 async function createDBEntry(searchDTO) {
