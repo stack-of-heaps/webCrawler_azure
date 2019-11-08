@@ -3,6 +3,7 @@
 const WebScraper = require('./lib/webScraper.js');
 const Crawl = require('./lib/crawl.js');
 const SampleData = require('./lib/sampleData.js');
+const crawl2 = require('./lib/crawl2.js');
 
 const Mongo = require('./mongoModule');
 const MongoManager = require('./mongoManager');
@@ -43,6 +44,11 @@ app.get('/pastSearchesTutorial', (req, res) => {
 });
 
 // <-- END PARTIALS -->
+
+app.get('/crawler2', (req, res) => {
+  crawl2;
+
+})
 
 app.post('/search', (req, res) => {
   var data = req.body;

@@ -1,0 +1,10 @@
+{
+    "parent": "http: //www.google.com",
+    "self": {
+        "url": "http://finance.google.com",
+        "scraped-data": "[...]"
+    },
+    "depth": 3,
+    "children": {
+    }
+}
