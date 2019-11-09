@@ -46,7 +46,6 @@ app.get('/pastSearchesTutorial', (req, res) => {
 // <-- END PARTIALS -->
 
 app.get('/crawler2', (req, res) => {
-  crawl2;
 
 })
 
