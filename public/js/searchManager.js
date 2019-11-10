@@ -1,5 +1,5 @@
-import * as pastSearchManager from './pastSearch.js';
-import * as sidePanelManager from './sidePanel.js';
+import * as pastSearchManager from './partials/pastSearch.js';
+import * as sidePanelManager from './partials/sidePanel.js';
 const CRAWLER = '/crawlerRequest';
 const CHECKURL = '/checkURL';
 const PASTSEARCHBYURL = '/pastSearchByURL';

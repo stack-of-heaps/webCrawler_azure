@@ -2,8 +2,8 @@
 // const links = require('./data/links.js');
 const WebScraper = require('./lib/webScraper.js');
 
-const Mongo = require('./mongoModule');
-const MongoManager = require('./mongoManager');
+const Mongo = require('./lib/mongo/mongoModule');
+const MongoManager = require('./lib/mongo/mongoManager');
 const axios = require('axios');
 var express = require('express');
 var path = require('path');
