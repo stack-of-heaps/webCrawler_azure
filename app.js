@@ -1,9 +1,6 @@
 // This is a complete version which still needs a view to display
 // const links = require('./data/links.js');
 const WebScraper = require('./lib/webScraper.js');
-const Crawl = require('./lib/crawl.js');
-const SampleData = require('./lib/sampleData.js');
-const crawl2 = require('./lib/crawl2.js');
 
 const Mongo = require('./mongoModule');
 const MongoManager = require('./mongoManager');
@@ -13,6 +10,7 @@ var path = require('path');
 const dayjs = require('dayjs');
 const PORT = 3000;
 var app = express();
+const { fork } = require('child_process');
 app.set('port', PORT);
 app.use(express.static('public'));
 app.use(express.json());
@@ -45,18 +43,20 @@ app.get('/pastSearchesTutorial', (req, res) => {
 
 // <-- END PARTIALS -->
 
-app.get('/crawler2', (req, res) => {
-  crawl2.crawl('http://www.xkcd.com');
-
-})
-
 app.post('/search', (req, res) => {
+
   var data = req.body;
-  // res.send(SampleData);
-  var webScraper = new WebScraper(data);
-  Crawl.parsedLinkInfo(webScraper, function (scraper) {
-    res.send(scraper.returnJsonData());
+  console.log('data: ', data);
+
+  /*
+  let crawler = fork('./lib/crawl2.js');
+
+  crawler.send({ url: 'http://www.xkcd.com' });
+  crawler.on('message', result => {
+    res.send(result);
+    
   });
+  */
 });
 
 app.get('/scraper', (req, res) => {
@@ -144,11 +144,8 @@ app.post('/updateCrawlerData', async (req, res) => {
       date: dayjs().format()
     }
 
-    console.log('updating DB entry');
     const result = MongoManager.updateCrawlerData(mongoID, mongoDTO);
-    console.log('between updated and inside then');
     result.then(data => {
-      console.log('inside then');
       res.send(scraper.returnJsonData())
     }
     )
