@@ -45,15 +45,19 @@ app.post('/search', async (req, res) => {
 
   let url = req.body.search_url;
   let depth = req.body.search_depth;
-  let type = req.body.serach_type;
+  let type = req.body.search_type;
+  let crawlerResult = null;
 
-  const crawlerResult = await invokeCrawler(res, url);
+  if (type === 'depth_search') {
+    crawlerResult = await depthSearch(url, depth);
+  }
+  else {
+    crawlerResult = await invokeCrawler(url);
+  }
 
   res.send(crawlerResult);
 
 });
-
-
 
 app.get('/scraper', (req, res) => {
   // data = { search_url: '',
@@ -124,29 +128,25 @@ app.post('/newDBEntry', async (req, res) => {
 
 app.post('/updateCrawlerData', async (req, res) => {
 
-  let data = req.body;
-  let mongoID = data._id;
-  let newDepth = data.search_depth;
+  let mongoID = req.body._id;
+
   if (mongoID === null) {
     console.error('updateCrawlerData: passed in _id is null');
     res.sendStatus(400);
   }
 
-  var webScraper = new WebScraper(data);
-  Crawl.parsedLinkInfo(webScraper, function (scraper) {
-    let mongoDTO = {
-      depth: newDepth,
-      crawlerData: JSON.stringify(scraper.returnJsonData()),
-      date: dayjs().format()
-    }
+  let crawlerResult = await invokeCrawler(req.body.search_url);
+  let mongoDTO = {
+    depth: req.body.search_depth,
+    crawlerData: JSON.stringify(crawlerResult),
+    date: dayjs().format()
+  }
 
-    const result = MongoManager.updateCrawlerData(mongoID, mongoDTO);
-    result.then(data => {
-      res.send(scraper.returnJsonData())
-    }
-    )
-  });
-})
+  const result = MongoManager.updateCrawlerData(mongoID, mongoDTO);
+  result.then(data => {
+    res.send(crawlerResult)
+  })
+});
 
 app.get('/getPastSearch', async (req, res) => {
   let id = req.query.id;
@@ -157,14 +157,13 @@ app.get('/getPastSearch', async (req, res) => {
 app.listen(app.get('port'));
 console.log('Express server listening on port ' + PORT);
 
-async function invokeCrawler(res, url) {
+async function invokeCrawler(url) {
   let crawler = fork('./lib/crawler.js');
 
   return new Promise((resolve, reject) => {
 
-    crawler.send({ url: 'http://www.xkcd.com' });
+    crawler.send({ url: url });
     crawler.on('message', result => {
-      //res.send(result);
       resolve(result);
     })
   })
@@ -189,4 +188,89 @@ function createMongoDTO(reqBody) {
     date: dayjs().format(),
     crawlerData: reqBody.crawlerData
   }
+}
+
+app.get('/crawlertest', async (req, res) => {
+
+  depthSearch('http://www.google.com', 3);
+
+})
+
+async function depthSearch(rootURL, searchDepth) {
+
+  let depth = 1;
+
+  let rootResult = await invokeCrawler('http://www.google.com');
+  console.log("ROOTRESULT LINKS: ", rootResult);
+
+  //updateRootNode(rootNode, rootResult);
+  let rootNode = createNode(rootResult, rootURL, rootURL, depth);
+
+  let pagesToVisit = getLinkURLs(rootResult.links);
+  let randomLink = getRandomLink(pagesToVisit, []);
+
+  let visitedPages = [rootURL];
+  let pageQueue = [randomLink];
+  let parentQueue = [rootURL];
+
+  //TODO: PREVENT VISITING LINKS TWICE
+  while (depth < searchDepth) {
+    depth++;
+    console.log('NEW DEPTH: ', depth);
+    
+    if (pageQueue.length < 1) {
+      break;
+    }
+
+    let thisParent = parentQueue.pop();
+    let newLink = pageQueue.pop();
+
+    let childResult = await invokeCrawler(newLink);
+    visitedPages.push(newLink);
+
+    let childNode = createNode(childResult, thisParent, newLink, depth);
+    rootNode.children.push(childNode);
+
+    let childLinks = getLinkURLs(childResult.links);
+    let nextLink = getRandomLink(childLinks, visitedPages);
+    console.log(nextLink);
+
+    pageQueue.push(nextLink);
+    parentQueue.push(nextLink);
+  }
+
+  return rootNode;
+}
+
+function getLinkURLs(linkArray) {
+  let justURLs = linkArray.map(url => {
+    return url.url;
+  })
+
+  return justURLs;
+}
+
+function getRandomLink(linkArray, visitedLinks) {
+  let randomIndex = Math.floor(Math.random() * linkArray.length - 1);
+  let randomLink = linkArray[randomIndex];
+  console.log(randomLink);
+  if (visitedLinks.includes(randomLink)) {
+    console.log('found redundant link');
+    linkArray = linkArray.filter(x => x !== randomLink);
+    return getRandomLink(linkArray, visitedLinks);
+  }
+  else {
+    return randomLink;
+  }
+}
+
+function createNode(crawlerResult, parent, url, depth) {
+
+  let newNode = crawlerResult;
+  newNode.depth = depth;
+  newNode.parent = parent;
+  newNode.self = url;
+
+  return newNode;
+
 }
