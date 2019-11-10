@@ -1,6 +1,5 @@
-// This is a complete version which still needs a view to display
-// const links = require('./data/links.js');
 const WebScraper = require('./lib/webScraper.js');
+const PORT = 3000;
 
 const Mongo = require('./lib/mongo/mongoModule');
 const MongoManager = require('./lib/mongo/mongoManager');
@@ -8,10 +7,9 @@ const axios = require('axios');
 var express = require('express');
 var path = require('path');
 const dayjs = require('dayjs');
-const PORT = 3000;
 var app = express();
-const { fork } = require('child_process');
 app.set('port', PORT);
+const { fork } = require('child_process');
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
@@ -43,21 +41,19 @@ app.get('/pastSearchesTutorial', (req, res) => {
 
 // <-- END PARTIALS -->
 
-app.post('/search', (req, res) => {
+app.post('/search', async (req, res) => {
 
-  var data = req.body;
-  console.log('data: ', data);
+  let url = req.body.search_url;
+  let depth = req.body.search_depth;
+  let type = req.body.serach_type;
 
-  /*
-  let crawler = fork('./lib/crawl2.js');
+  const crawlerResult = await invokeCrawler(res, url);
 
-  crawler.send({ url: 'http://www.xkcd.com' });
-  crawler.on('message', result => {
-    res.send(result);
-    
-  });
-  */
+  res.send(crawlerResult);
+
 });
+
+
 
 app.get('/scraper', (req, res) => {
   // data = { search_url: '',
@@ -118,7 +114,7 @@ app.post('/pastSearchByID', async (req, res) => {
 });
 
 app.post('/newDBEntry', async (req, res) => {
-  let mongoDTO = createDTO(req.body);
+  let mongoDTO = createMongoDTO(req.body);
   if (mongoDTO === null) {
     res.sendStatus(400);
   }
@@ -161,6 +157,19 @@ app.get('/getPastSearch', async (req, res) => {
 app.listen(app.get('port'));
 console.log('Express server listening on port ' + PORT);
 
+async function invokeCrawler(res, url) {
+  let crawler = fork('./lib/crawler.js');
+
+  return new Promise((resolve, reject) => {
+
+    crawler.send({ url: 'http://www.xkcd.com' });
+    crawler.on('message', result => {
+      //res.send(result);
+      resolve(result);
+    })
+  })
+}
+
 async function checkURL(url) {
   return new Promise((resolve, reject) => {
     axios.head(url)
@@ -171,7 +180,7 @@ async function checkURL(url) {
   })
 }
 
-function createDTO(reqBody) {
+function createMongoDTO(reqBody) {
 
   return {
     url: reqBody.search_url,
