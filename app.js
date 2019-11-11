@@ -143,7 +143,6 @@ app.post('/updateCrawlerData', async (req, res) => {
   let crawlerResult;
 
   if (search_type === 'depth_search') {
-    console.log('search_type = depth_search')
     crawlerResult = await depthSearch.crawl(search_url, search_depth);
   }
   else {
@@ -155,9 +154,6 @@ app.post('/updateCrawlerData', async (req, res) => {
     crawlerData: JSON.stringify(crawlerResult),
     date: dayjs().format()
   }
-
-  console.log('updating crawler data: ');
-  console.log(crawlerResult);
 
   const result = MongoManager.updateCrawlerData(mongoID, mongoDTO);
   result.then(data => {
