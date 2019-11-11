@@ -55,7 +55,9 @@ app.post('/search', async (req, res) => {
     crawlerResult = await depthSearch.crawl(url, depth);
   }
   else {
-    crawlerResult = await crawler.invokeCrawler(url);
+    let newCrawler = crawler.spawnCrawler();
+    crawlerResult = await crawler.invokeCrawler(newCrawler, url);
+    newCrawler.kill();
   }
 
   res.send(crawlerResult);
@@ -146,7 +148,9 @@ app.post('/updateCrawlerData', async (req, res) => {
     crawlerResult = await depthSearch.crawl(search_url, search_depth);
   }
   else {
-    crawlerResult = await crawler.invokeCrakwler(search_url);
+    let newCrawler = crawler.spawnCrawler();
+    crawlerResult = await crawler.invokeCrakwler(newCrawler, search_url);
+    newCrawler.kill();
   }
 
   let mongoDTO = {
