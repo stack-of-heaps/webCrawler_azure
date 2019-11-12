@@ -25,119 +25,43 @@ async function submitChartForm(data) {
 }
 
 function buildChart(response) {
-
   clearScreen();
-  // TODO: move this to the HierarchyChartData class
-  var treeData = [response];
-
-  // TODO: remove the below values and use chartLayout.getLayout()
   var chartLayout = new HierarchyChartLayout();
-  // console.log(chartLayout.getLayout());
+  var chartData = new HierarchyChartData(response, chartLayout);
 
-  // ************** Generate the tree diagram	 *****************
-  var margin = { top: 30, right: 120, bottom: 20, left: 300 },
-    width = 1060 - margin.right - margin.left,
-    height = 700 - margin.top - margin.bottom;
-
-  var i = 0,
-    duration = 750,
-    root;
-
-  var tree = d3.layout.tree().size([height, width]);
-
-  var diagonal = d3.svg.diagonal().projection(function (d) { return [d.y, d.x]; });
-
-  var svg = d3.select("#visualization").append("svg")
-    .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  root = treeData[0];
-  root.x0 = height / 2;
-  root.y0 = 0;
-
-  update(root);
-
+  chartData.buildTreeRoot();
+  updateTree(chartData.root);
   d3.select(self.frameElement).style("height", "600px");
 
-  function update(source) {
+  function updateTree(source) {
     // Compute the new tree layout.
-    var nodes = tree.nodes(root).reverse(),
-      links = tree.links(nodes);
+    var nodes = chartData.getTreeNodes();
+    var links = chartData.getTreeLinks(nodes);
 
     // Normalize for fixed-depth.
     nodes.forEach(function (d) { d.y = d.depth * 180; });
 
     // Update the nodes…
-    var node = svg.selectAll("g.node").data(nodes, function (d) { return d.id || (d.id = ++i); });
+    var node = chartLayout.svgSelectAll(nodes);
 
     // Enter any new nodes at the parent's previous position.
     var nodeEnter = node.enter().append("g")
       .attr("class", "node")
       .attr("transform", function (d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-      .on("click", click);
+      .on("click", nodeClick)
+      .on("mouseover", nodeHover).on("mouseout", nodeRemoveHover);
 
-    nodeEnter.append("circle")
-      .attr("r", 1e-6)
-      .style("fill", function (d) { return d._children ? "lightsteelblue" : "#fff"; });
 
-    nodeEnter.append("text")
-      .attr("x", function (d) { return d.children || d._children ? -13 : 13; })
-      .attr("dy", ".35em")
-      .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
-      .text(function (d) { return d.title; })
-      .style("fill-opacity", 1e-6);
+    chartLayout.handleNodeEnter(nodeEnter);
 
     // Transition nodes to their new position.
-    var nodeUpdate = node.transition()
-      .duration(duration)
-      .attr("transform", function (d) { return "translate(" + d.y + "," + d.x + ")"; });
-
-    nodeUpdate.select("circle")
-      .attr("r", 10)
-      .style("fill", function (d) { return d._children ? "lightsteelblue" : "#fff"; });
-
-    nodeUpdate.select("text")
-      .style("fill-opacity", 1);
+    chartLayout.handleNodeUpdate(node);
 
     // Transition exiting nodes to the parent's new position.
-    var nodeExit = node.exit().transition()
-      .duration(duration)
-      .attr("transform", function (d) { return "translate(" + source.y + "," + source.x + ")"; })
-      .remove();
-
-    nodeExit.select("circle")
-      .attr("r", 1e-6);
-
-    nodeExit.select("text")
-      .style("fill-opacity", 1e-6);
+    chartLayout.handleNodeExit(node, source);
 
     // Update the links…
-    var link = svg.selectAll("path.link")
-      .data(links, function (d) { return d.target.id; });
-
-    // Enter any new links at the parent's previous position.
-    link.enter().insert("path", "g")
-      .attr("class", "link")
-      .attr("d", function (d) {
-        var o = { x: source.x0, y: source.y0 };
-        return diagonal({ source: o, target: o });
-      });
-
-    // Transition links to their new position.
-    link.transition()
-      .duration(duration)
-      .attr("d", diagonal);
-
-    // Transition exiting nodes to the parent's new position.
-    link.exit().transition()
-      .duration(duration)
-      .attr("d", function (d) {
-        var o = { x: source.x, y: source.y };
-        return diagonal({ source: o, target: o });
-      })
-      .remove();
+    chartData.handleLink(links, source);
 
     // Stash the old positions for transition.
     nodes.forEach(function (d) {
@@ -146,8 +70,54 @@ function buildChart(response) {
     });
   }
 
-  // Toggle children on click.
-  function click(d) {
+  function buildTooltip(d) {
+    //TODO: add the following:
+    // - description
+    // - favicon
+    // - title
+    // - type
+    // - parent
+    // - self
+
+    var toolTipDiv = "";
+    toolTipDiv += "<div class='graph-tooltip'>";
+    toolTipDiv += "<p class='info-title'>" + d.title  + "</p>";
+    toolTipDiv += "<p class='info-description'>" + d.description + "</p>";
+    toolTipDiv += "<p class='info-favicon'>" +  d.favicon + "</p>";
+    toolTipDiv += "<p class='info-type'>" +  d.type + "</p>";
+    toolTipDiv += "<p class='info-self'>" +  d.self + "</p>";
+    toolTipDiv += "</div>";
+    return toolTipDiv;
+  }
+
+  function nodeHover(d) {
+    var content = buildTooltip(d);
+    var tooltip = d3.select('body').append('div').attr('class', 'customTooltip-wrapper');
+
+    // tooltip.append("svg:title").text(function(d) { return d.description; });
+
+    tooltip.html(content);
+    tooltip.transition().duration(200).style("opacity", "1").style("display", "block");
+
+    // d3.select(this).attr('cursor', 'pointer').attr('stroke-width', 50);
+    // var y = d3.event.pageY;
+    // var x = d3.event.pageX;
+    //
+    // if (y < 220) {
+    //   y += 220 - y;
+    //   x += 130;
+    // }
+    // 
+    // tooltip.style('top', (y - 300) + 'px').style('left', (x-470) + 'px');
+    //
+  }
+
+  function nodeRemoveHover(d) {
+    var tooltip = d3.select('.customTooltip-wrapper');
+    tooltip.remove();
+  }
+
+  function nodeClick(d) {
     if (d.children) {
       d._children = d.children;
       d.children = null;
@@ -155,7 +125,7 @@ function buildChart(response) {
       d.children = d._children;
       d._children = null;
     }
-    update(d);
+    updateTree(d);
   }
 }
 

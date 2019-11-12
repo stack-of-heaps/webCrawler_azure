@@ -23,3 +23,13 @@ svg {
   float: right;
   overflow: initial;
 }
+
+.customTooltip-wrapper {
+  position: absolute;
+  top: 30%;
+  width: 250px;
+  left: 30%;
+  background: lightgrey;
+  padding: 10px;
+  border-radius: 4px;
+}
