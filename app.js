@@ -53,7 +53,12 @@ app.post('/search', async (req, res) => {
   let crawlerResult = null;
 
   if (type === 'depth_search') {
+    try {
     crawlerResult = await depthSearch.crawl(url, depth);
+    }
+    catch(e) {
+      console.log('e');
+    }
   }
   else {
     let newCrawler = crawler.spawnCrawler();
