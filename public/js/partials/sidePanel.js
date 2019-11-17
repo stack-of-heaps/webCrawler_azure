@@ -26,7 +26,6 @@ function buildSidePanelElements(crawlerData) {
     let highlightElementTable = document.getElementById('highlight-element-tbody');
 
     let linkElements = crawlerData.children;
-    let numLinks = linkElements.length;
 
     linkElements.forEach((link, index) => {
         let newTR = document.createElement('tr');
