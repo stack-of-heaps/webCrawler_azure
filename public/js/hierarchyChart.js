@@ -1,7 +1,5 @@
 async function submitChartForm(data) {
-  console.log(JSON.stringify(data));
   return new Promise((resolve, reject) => {
-
     $.ajax({
       type: 'POST',
       url: "/search",
@@ -30,10 +28,10 @@ function buildChart(response) {
   var chartData = new HierarchyChartData(response, chartLayout);
 
   chartData.buildTreeRoot();
-  updateTree(chartData.root);
-  d3.select(self.frameElement).style("height", "600px");
+  update(chartData.root);
+  d3.select(self.frameElement).style("height", "900px");
 
-  function updateTree(source) {
+  function update(source) {
     // Compute the new tree layout.
     var nodes = chartData.getTreeNodes();
     var links = chartData.getTreeLinks(nodes);
@@ -41,16 +39,13 @@ function buildChart(response) {
     // Normalize for fixed-depth.
     nodes.forEach(function (d) { d.y = d.depth * 180; });
 
-    // Update the nodes…
     var node = chartLayout.svgSelectAll(nodes);
 
     // Enter any new nodes at the parent's previous position.
     var nodeEnter = node.enter().append("g")
       .attr("class", "node")
       .attr("transform", function (d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-      .on("click", nodeClick)
-      .on("mouseover", nodeHover).on("mouseout", nodeRemoveHover);
-
+      .on("click", click);
 
     chartLayout.handleNodeEnter(nodeEnter);
 
@@ -61,7 +56,30 @@ function buildChart(response) {
     chartLayout.handleNodeExit(node, source);
 
     // Update the links…
-    chartData.handleLink(links, source);
+    var link = chartLayout.svg.selectAll("path.link")
+      .data(links, function (d) { return d.target.id; });
+
+    // Enter any new links at the parent's previous position.
+    link.enter().insert("path", "g")
+      .attr("class", "link")
+      .attr("d", function (d) {
+        var o = { x: source.x0, y: source.y0 };
+        return chartData.diagonal({ source: o, target: o });
+      });
+
+    // Transition links to their new position.
+    link.transition()
+      .duration(chartLayout.duration)
+      .attr("d", chartData.diagonal);
+
+    // Transition exiting nodes to the parent's new position.
+    link.exit().transition()
+      .duration(chartLayout.duration)
+      .attr("d", function (d) {
+        var o = { x: source.x, y: source.y };
+        return chartData.diagonal({ source: o, target: o });
+      })
+      .remove();
 
     // Stash the old positions for transition.
     nodes.forEach(function (d) {
@@ -70,54 +88,8 @@ function buildChart(response) {
     });
   }
 
-  function buildTooltip(d) {
-    //TODO: add the following:
-    // - description
-    // - favicon
-    // - title
-    // - type
-    // - parent
-    // - self
-
-    var toolTipDiv = "";
-    toolTipDiv += "<div class='graph-tooltip'>";
-    toolTipDiv += "<p class='info-title'>" + d.title  + "</p>";
-    toolTipDiv += "<p class='info-description'>" + d.description + "</p>";
-    toolTipDiv += "<p class='info-favicon'>" +  d.favicon + "</p>";
-    toolTipDiv += "<p class='info-type'>" +  d.type + "</p>";
-    toolTipDiv += "<p class='info-self'>" +  d.self + "</p>";
-    toolTipDiv += "</div>";
-    return toolTipDiv;
-  }
-
-  function nodeHover(d) {
-    var content = buildTooltip(d);
-    var tooltip = d3.select('body').append('div').attr('class', 'customTooltip-wrapper');
-
-    // tooltip.append("svg:title").text(function(d) { return d.description; });
-
-    tooltip.html(content);
-    tooltip.transition().duration(200).style("opacity", "1").style("display", "block");
-
-    // d3.select(this).attr('cursor', 'pointer').attr('stroke-width', 50);
-    // var y = d3.event.pageY;
-    // var x = d3.event.pageX;
-    //
-    // if (y < 220) {
-    //   y += 220 - y;
-    //   x += 130;
-    // }
-    // 
-    // tooltip.style('top', (y - 300) + 'px').style('left', (x-470) + 'px');
-    //
-  }
-
-  function nodeRemoveHover(d) {
-    var tooltip = d3.select('.customTooltip-wrapper');
-    tooltip.remove();
-  }
-
-  function nodeClick(d) {
+  // Toggle children on click.
+  function click(d) {
     if (d.children) {
       d._children = d.children;
       d.children = null;
@@ -125,7 +97,7 @@ function buildChart(response) {
       d.children = d._children;
       d._children = null;
     }
-    updateTree(d);
+    update(d);
   }
 }
 

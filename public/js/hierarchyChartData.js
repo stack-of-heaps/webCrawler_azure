@@ -29,34 +29,8 @@ class HierarchyChartData {
 
   buildTreeRoot() {
     this.root = this.treeData[0];
-    this.root.x0 = this.layout.height / 2;
+    // this.root.x0 = this.layout.height / 2;
+    this.root.x0 = 800;
     this.root.y0 = 0;
-  }
-
-  handleLink(links, source) {
-    this.link = this.layout.svg.selectAll("path.link")
-      .data(links, function (d) { return d.target.id; });
-
-    // Enter any new links at the parent's previous position.
-    this.link.enter().insert("path", "g")
-      .attr("class", "link")
-      .attr("d", function (d) {
-        var o = { x: source.x0, y: source.y0 };
-        return diagonal({ source: o, target: o });
-      });
-
-    // Transition links to their new position.
-    this.link.transition()
-      .duration(this.layout.duration)
-      .attr("d", this.diagonal);
-
-    // Transition exiting nodes to the parent's new position.
-    this.link.exit().transition()
-      .duration(this.layout.duration)
-      .attr("d", function (d) {
-        var o = { x: source.x, y: source.y };
-        return diagonal({ source: o, target: o });
-      })
-      .remove();
   }
 };
