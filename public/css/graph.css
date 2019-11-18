@@ -2,6 +2,10 @@
   cursor: pointer;
 }
 
+div#visualization {
+    height: 1500px;
+}
+
 .node circle {
   stroke-width: 3px;
 }

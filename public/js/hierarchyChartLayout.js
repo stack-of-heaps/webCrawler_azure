@@ -24,7 +24,7 @@ class HierarchyChartLayout {
                  .attr("width", "100%")
                  .attr("height", "100%")
                  .append("g")
-                 .attr("transform", "translate(" + 100 + "," + this.margin.top + ")");
+                 .attr("transform", "translate(" + 250 + "," + 70 + ")");
                  //.attr("width", this.width + this.margin.right + this.margin.left)
                  //.attr("height", this.height + this.margin.top + this.margin.bottom)
   }
@@ -43,7 +43,7 @@ class HierarchyChartLayout {
       .attr("x", function (d) { return d.children || d._children ? -14 : 14; })
       .attr("y", 3)
       .attr("text-anchor", function (d) { return d.children || d._children ? "end" : "start"; })
-      .text(function (d) { return d.title; })
+      .text(function (d) { return HierarchyChartTooltip.fixLongString(d.title, 25); })
       .style("fill-opacity", 1);
   }
 
@@ -85,6 +85,6 @@ class HierarchyChartLayout {
 
   nodeRemoveHover(d) {
     var tooltip = d3.select('.customTooltip-wrapper');
-    // tooltip.remove();
+    tooltip.remove();
   }
 };

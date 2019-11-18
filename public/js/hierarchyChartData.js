@@ -8,7 +8,12 @@ class HierarchyChartData {
   }
 
   buildTree() {
-    return d3.layout.tree().size([this.layout.height, this.layout.width]);
+    return d3.layout
+      .tree()
+      .size([this.layout.height, this.layout.width])
+      children(function(d) {
+        return !d.links || d.links.length === 0 ? null : d.links;
+      });
   }
 
   buildDiagonal() {
@@ -32,5 +37,8 @@ class HierarchyChartData {
     // this.root.x0 = this.layout.height / 2;
     this.root.x0 = 800;
     this.root.y0 = 0;
+    this.tree.nodes(this.root).forEach((d,i) => {
+      d.id = i+1;
+    });
   }
 };

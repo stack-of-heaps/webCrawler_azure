@@ -2,10 +2,17 @@ class HierarchyChartTooltip {
   static buildTooltip(d) {
     var toolTipDiv = "";
     toolTipDiv += "<div class='container graph-tooltip'>";
-    toolTipDiv += HierarchyChartTooltip.buildTooltipImageRow("Favicon", d.favicon);
-    toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Title", d.title);
-    toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Description", d.description);
-    toolTipDiv += HierarchyChartTooltip.buildTooltipLinkRow("Self", d.self);
+    if(d.children || d._chldren) {
+      toolTipDiv += HierarchyChartTooltip.buildTooltipImageRow("Favicon", d.favicon);
+      toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Title", d.title);
+      toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Description", d.description);
+      toolTipDiv += HierarchyChartTooltip.buildTooltipLinkRow("Self", d.self);
+    } else {
+      toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Orientation", d.orientation);
+      toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Text", d.text);
+      toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Type", d.type);
+      toolTipDiv += HierarchyChartTooltip.buildTooltipLinkRow("URL", d.url);
+    }
     toolTipDiv += "</div>";
     return toolTipDiv;
   }
@@ -44,5 +51,20 @@ class HierarchyChartTooltip {
             '</div>',
             '</div>'
            ].join('\n');
+  }
+
+  static fixLongString(str, length) {
+    if(typeof str === "undefined") {
+      return str;
+    }
+    else if (length == null) {
+      length = 50;
+    }
+    var ending = '...';
+    if (str.length > length) {
+      return str.substring(0, length - ending.length) + ending;
+    } else {
+      return str;
+    }
   }
 };

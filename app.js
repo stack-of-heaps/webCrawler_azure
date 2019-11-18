@@ -155,7 +155,7 @@ app.post('/updateCrawlerData', async (req, res) => {
   }
   else {
     let newCrawler = crawler.spawnCrawler();
-    crawlerResult = await crawler.invokeCrakwler(newCrawler, search_url);
+    crawlerResult = await crawler.invokeCrawler(newCrawler, search_url);
     newCrawler.kill();
   }
 

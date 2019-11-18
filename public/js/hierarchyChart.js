@@ -24,6 +24,9 @@ async function submitChartForm(data) {
 
 function buildChart(response) {
   clearScreen();
+
+  response.children = response.links
+
   var chartLayout = new HierarchyChartLayout();
   var chartData = new HierarchyChartData(response, chartLayout);
 
