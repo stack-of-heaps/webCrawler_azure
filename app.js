@@ -4,6 +4,7 @@ const axios = require('axios');
 const crawler = require('./lib/crawler');
 const dayjs = require('dayjs');
 const depthSearch = require('./lib/depthSearch');
+const breadthSearch = require('./lib/breadthSearch');
 const myParser = require("body-parser");
 const Mongo = require('./lib/mongo/mongoModule');
 const MongoManager = require('./lib/mongo/mongoManager');
@@ -12,8 +13,8 @@ const path = require('path');
 
 const app = express();
 app.use(express.static('public'));
-app.use(myParser.json({limit: '200mb'}));
-app.use(myParser.urlencoded({limit: '200mb', extended: true}));
+app.use(myParser.json({ limit: '200mb' }));
+app.use(myParser.urlencoded({ limit: '200mb', extended: true }));
 require('events').EventEmitter.defaultMaxListeners = 15;
 
 app.set('port', PORT);
@@ -54,20 +55,21 @@ app.post('/search', async (req, res) => {
 
   if (type === 'depth_search') {
     try {
-    crawlerResult = await depthSearch.crawl(url, depth);
+      crawlerResult = await depthSearch.crawl(url, depth);
     }
-    catch(e) {
+    catch (e) {
       console.log('e');
     }
   }
   else {
-    let newCrawler = crawler.spawnCrawler();
-    crawlerResult = await crawler.invokeCrawler(newCrawler, url);
-    newCrawler.kill();
+    try {
+      crawlerResult = await breadthSearch.crawl(url, depth);
+    }
+    catch (e) {
+      console.log('e');
+    }
   }
-
   res.send(crawlerResult);
-
 });
 
 app.get('/scraper', (req, res) => {
@@ -154,9 +156,7 @@ app.post('/updateCrawlerData', async (req, res) => {
     crawlerResult = await depthSearch.crawl(search_url, search_depth);
   }
   else {
-    let newCrawler = crawler.spawnCrawler();
-    crawlerResult = await crawler.invokeCrawler(newCrawler, search_url);
-    newCrawler.kill();
+    crawlerResult = await breadthSearch.crawl(search_url, search_depth);
   }
 
   let mongoDTO = {
