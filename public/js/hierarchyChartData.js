@@ -11,9 +11,26 @@ class HierarchyChartData {
     return d3.layout
       .tree()
       .size([this.layout.height, this.layout.width])
-      children(function(d) {
-        return !d.links || d.links.length === 0 ? null : d.links;
+      .children(function(d) {
+          return !d.children || d.children.length === 0 ? null : d3.shuffle(d.children);
       });
+      // .children(this.determineChildren);
+
+  }
+
+  determineChildren(d) {
+    if(typeof d.links != "undefined" && typeof d.children != "undefined") {
+    // if((d.links || d.links.length != 0) && (d.children || d.children.length != 0)) {
+      d.children = d.children.concat(d.links.slice(0, 3));
+      return d.children;
+    }else if(typeof d.children != "undefined") {
+      return d.children;
+    } else if(typeof d.links != "undefined") {
+      return d.links;
+    } else {
+      return null;
+    }
+    // return !d.links || d.links.length === 0 ? null : d.links;
   }
 
   buildDiagonal() {
