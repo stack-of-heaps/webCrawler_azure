@@ -99,9 +99,10 @@ app.post('/checkURL', async (req, res) => {
 
 app.post('/pastSearchByURL', async (req, res) => {
   let url = req.body.url;
+  let search_type = req.body.search_type;
 
   try {
-    let response = await MongoManager.findPastSearchByURL(url);
+    let response = await MongoManager.findPastSearchByURL(url, search_type);
     if (response === null) {
       response = { _id: null }
     }
@@ -132,9 +133,11 @@ app.post('/pastSearchByID', async (req, res) => {
 
 app.post('/newDBEntry', async (req, res) => {
   let mongoDTO = createMongoDTO(req.body);
+
   if (mongoDTO === null) {
     res.sendStatus(400);
   }
+
   let mongoResult = await MongoManager.createNewEntry(mongoDTO);
   res.send(mongoResult);
 })
