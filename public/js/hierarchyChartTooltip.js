@@ -2,7 +2,7 @@ class HierarchyChartTooltip {
   static buildTooltip(d) {
     var toolTipDiv = "";
     toolTipDiv += "<div class='container graph-tooltip'>";
-    if(d.children || d._chldren) {
+    if(d.description != undefined) {
       toolTipDiv += HierarchyChartTooltip.buildTooltipImageRow("Favicon", d.favicon);
       toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Title", d.title);
       toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Description", d.description);
@@ -35,7 +35,7 @@ class HierarchyChartTooltip {
             "<span class='header-self'>" + linkTitle + "</p>",
             "</div>",
             "<div class='col-9'>",
-            "<img class='info-self' src='" + linkInfo + "' alt='favicon-icon' />",
+            "<img class='info-self' src='" + linkInfo + "' alt='favicon-icon' onerror='this.style.display=\"none\"' />",
             '</div>',
             '</div>'
            ].join('\n');
@@ -54,7 +54,7 @@ class HierarchyChartTooltip {
   }
 
   static fixLongString(str, length) {
-    if(typeof str === "undefined") {
+    if(typeof str === "undefined" || str === null) {
       return str;
     }
     else if (length == null) {
