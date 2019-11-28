@@ -15,7 +15,7 @@ const app = express();
 app.use(express.static('public'));
 app.use(myParser.json({ limit: '200mb' }));
 app.use(myParser.urlencoded({ limit: '200mb', extended: true }));
-require('events').EventEmitter.defaultMaxListeners = 15;
+require('events').EventEmitter.defaultMaxListeners = 25;
 
 app.set('port', PORT);
 
