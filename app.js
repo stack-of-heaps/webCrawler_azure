@@ -15,7 +15,7 @@ const app = express();
 app.use(express.static('public'));
 app.use(myParser.json({ limit: '200mb' }));
 app.use(myParser.urlencoded({ limit: '200mb', extended: true }));
-require('events').EventEmitter.defaultMaxListeners = 25;
+require('events').EventEmitter.defaultMaxListeners = 100;
 
 app.set('port', PORT);
 
@@ -165,7 +165,8 @@ app.post('/updateCrawlerData', async (req, res) => {
   let mongoDTO = {
     depth: req.body.search_depth,
     crawlerData: JSON.stringify(crawlerResult),
-    date: dayjs().format()
+    date: dayjs().format(),
+    search_type: search_type
   }
 
   const result = MongoManager.updateCrawlerData(mongoID, mongoDTO);
