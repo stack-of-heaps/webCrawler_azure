@@ -41,6 +41,8 @@ export async function crawlerRequest(event) {
     let searchDTO = createSearchDTO();
 
     let url = searchDTO.search_url;
+    let search_type = searchDTO.search_type;
+
     let urlResponse = await $.post(CHECKURL, { url: url });
 
     if (urlResponse.status >= 200 && urlResponse.status <= 299) {
@@ -53,7 +55,7 @@ export async function crawlerRequest(event) {
 
     setPastSearchStatus();
 
-    let pastSearch = await fetchPastSearchByURL(url);
+    let pastSearch = await fetchPastSearchByURL(url, search_type);
     let pastSearchStatus = getPastSearchInfo(pastSearch, searchDTO);
 
     setPastSearchStatus(pastSearchStatus);
@@ -145,22 +147,26 @@ function setPastSearchStatus(status = PAST_SEARCH_RESPONSES.IN_PROGRESS) {
     }
 }
 
-function getPastSearchInfo(dbCheck, searchDTO) {
-    if (dbCheck._id === null) {
+function getPastSearchInfo(pastSearch, searchDTO) {
+    if (pastSearch === null) {
         return PAST_SEARCH_RESPONSES.NOT_EXIST;
     }
-    else {
-        let staleData = dataIsStale(dbCheck);
+
+    let staleData = dataIsStale(pastSearch);
+    if (pastSearch.search_type === searchDTO.search_type) {
+
         if (staleData) {
             return PAST_SEARCH_RESPONSES.EXISTS_STALE;
         }
-        else if (!staleData && Number(dbCheck.depth) >= Number(searchDTO.search_depth)) {
+
+        if (Number(pastSearch.depth) >= Number(searchDTO.search_depth)) {
             return PAST_SEARCH_RESPONSES.EXISTS_FRESH;
         }
-        else {
-            return PAST_SEARCH_RESPONSES.EXISTS_SHALLOW;
-        }
+
+        return PAST_SEARCH_RESPONSES.EXISTS_SHALLOW;
     }
+
+    return PAST_SEARCH_RESPONSES.NOT_EXIST;
 }
 
 async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
@@ -168,7 +174,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
     switch (dbStatus) {
         case PAST_SEARCH_RESPONSES.EXISTS_FRESH: {
             setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
-            const pastSearch = await fetchPastSearchByURL(searchDTO.search_url);
+            const pastSearch = await fetchPastSearchByURL(searchDTO.search_url, searchDTO.search_type);
             buildChart(JSON.parse(pastSearch.crawlerData));
             sidePanelManager.buildSidePanel().then(() => {
                 sidePanelManager.populateSidePanel(pastSearch.crawlerData)
@@ -282,8 +288,8 @@ function setNewDBEntryStatus(createResult = UPDATE_RESULT.IN_PROGRESS) {
     }
 }
 
-async function fetchPastSearchByURL(url) {
-    let result = await $.post(PASTSEARCHBYURL, { url: url });
+async function fetchPastSearchByURL(url, search_type) {
+    let result = await $.post(PASTSEARCHBYURL, { url: url, search_type: search_type });
     return result;
 }
 

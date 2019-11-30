@@ -15,7 +15,7 @@ const app = express();
 app.use(express.static('public'));
 app.use(myParser.json({ limit: '200mb' }));
 app.use(myParser.urlencoded({ limit: '200mb', extended: true }));
-require('events').EventEmitter.defaultMaxListeners = 15;
+require('events').EventEmitter.defaultMaxListeners = 100;
 
 app.set('port', PORT);
 
@@ -58,7 +58,7 @@ app.post('/search', async (req, res) => {
       crawlerResult = await depthSearch.crawl(url, depth);
     }
     catch (e) {
-      console.log('e');
+      console.log('/search error: ', e);
     }
   }
   else {
@@ -66,7 +66,7 @@ app.post('/search', async (req, res) => {
       crawlerResult = await breadthSearch.crawl(url, depth);
     }
     catch (e) {
-      console.log('e');
+      console.log('/search error: ', e);
     }
   }
   res.send(crawlerResult);
@@ -99,9 +99,10 @@ app.post('/checkURL', async (req, res) => {
 
 app.post('/pastSearchByURL', async (req, res) => {
   let url = req.body.url;
+  let search_type = req.body.search_type;
 
   try {
-    let response = await MongoManager.findPastSearchByURL(url);
+    let response = await MongoManager.findPastSearchByURL(url, search_type);
     if (response === null) {
       response = { _id: null }
     }
@@ -132,9 +133,11 @@ app.post('/pastSearchByID', async (req, res) => {
 
 app.post('/newDBEntry', async (req, res) => {
   let mongoDTO = createMongoDTO(req.body);
+
   if (mongoDTO === null) {
     res.sendStatus(400);
   }
+
   let mongoResult = await MongoManager.createNewEntry(mongoDTO);
   res.send(mongoResult);
 })
@@ -162,7 +165,8 @@ app.post('/updateCrawlerData', async (req, res) => {
   let mongoDTO = {
     depth: req.body.search_depth,
     crawlerData: JSON.stringify(crawlerResult),
-    date: dayjs().format()
+    date: dayjs().format(),
+    search_type: search_type
   }
 
   const result = MongoManager.updateCrawlerData(mongoID, mongoDTO);
