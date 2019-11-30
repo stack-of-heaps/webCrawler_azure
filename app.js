@@ -58,7 +58,7 @@ app.post('/search', async (req, res) => {
       crawlerResult = await depthSearch.crawl(url, depth);
     }
     catch (e) {
-      console.log('e');
+      console.log('/search error: ', e);
     }
   }
   else {
@@ -66,7 +66,7 @@ app.post('/search', async (req, res) => {
       crawlerResult = await breadthSearch.crawl(url, depth);
     }
     catch (e) {
-      console.log('e');
+      console.log('/search error: ', e);
     }
   }
   res.send(crawlerResult);
