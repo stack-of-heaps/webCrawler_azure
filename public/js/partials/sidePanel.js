@@ -21,15 +21,17 @@ export function flattenCrawlerData(crawlerData) {
     let nodeCopy = Object.assign({}, crawlerData);
     _.omit(nodeCopy, "children");
     depthArray.push(nodeCopy);
+    console.log('depthArray #1: ', depthArray);
 
     for (let children of crawlerData.children) {
         grabChildren(depthArray, children);
     }
 
+    console.log('deptharray #2: ', depthArray);
+
     let orderedByDepth = depthArray.sort(orderByDepth);
 
     return orderedByDepth;
-
 }
 
 function grabChildren(depthArray, child) {

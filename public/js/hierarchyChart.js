@@ -7,7 +7,8 @@ async function submitChartForm(data) {
       contentType: 'application/json',
       success: function (response) {
         resolve({
-          data: response,
+          data: response.data,
+          type: response.type,
           error: null
         });
       },
