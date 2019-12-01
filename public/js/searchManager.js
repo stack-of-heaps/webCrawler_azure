@@ -1,11 +1,8 @@
 import * as pastSearchManager from './partials/pastSearch.js';
 import * as sidePanelManager from './partials/sidePanel.js';
-const CRAWLER = '/crawlerRequest';
 const CHECKURL = '/checkURL';
 const PASTSEARCHBYURL = '/pastSearchByURL';
-const PASTSEARCHBYID = '/pastSearchByID';
 const NEWENTRYURL = '/newDBEntry';
-const GETPASTSEARCHURL = '/getPastSearch';
 const UPDATEPASTSEARCHURL = '/updateCrawlerData';
 
 const URL_RESPONSES = {
@@ -157,38 +154,48 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
             setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
             const pastSearch = await fetchPastSearchByURL(searchDTO.search_url, searchDTO.search_type);
             buildChart(JSON.parse(pastSearch.crawlerData));
-            sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(pastSearch.crawlerData));
+            sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(pastSearch.crawlerData, searchDTO.search_type));
             break;
         }
         case PAST_SEARCH_RESPONSES.EXISTS_STALE: {
             searchDTO._id = pastSearch._id;
             const chartData = await updateCrawlerDepth(searchDTO);
-            setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
-            buildChart(chartData);
-            sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData));
-
+            if (chartData && !chartData.error && chartData.data.depth !== -99 && chartData.data.status !== 400) {
+                setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
+                buildChart(chartData.data);
+                sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData.data, chartData.type));
+            }
+            else {
+                setNewDBEntryStatus(UPDATE_RESULT.FAILURE);
+            }
             break;
         }
         case PAST_SEARCH_RESPONSES.EXISTS_SHALLOW: {
             searchDTO._id = pastSearch._id;
             const chartData = await updateCrawlerDepth(searchDTO);
-            setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
-            buildChart(chartData);
-            sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData.data));
-        }
+            if (chartData && !chartData.error && chartData.data.depth !== -99 && chartData.data.status !== 400) {
+                setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
+                buildChart(chartData.data);
+                sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData.data, chartData.type));
+            }
+            else {
+                setNewDBEntryStatus(UPDATE_RESULT.FAILURE);
+            }
+
             break;
+        }
         case PAST_SEARCH_RESPONSES.NOT_EXIST: {
             setNewDBEntryStatus();
             const chartData = await submitChartForm(searchDTO);
 
-            if (!chartData.error) {
+            if (chartData && !chartData.error && chartData.data.depth !== -99 && chartData.data.status !== 400) {
                 searchDTO.crawlerData = JSON.stringify(chartData.data);
                 let result = await createDBEntry(searchDTO);
 
                 pastSearchManager.setPastSearchCookie(searchDTO.search_url, result._id);
                 setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
                 buildChart(chartData.data);
-                sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData.data));
+                sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData.data, chartData.type));
             }
             else {
                 setNewDBEntryStatus(UPDATE_RESULT.FAILURE);
@@ -231,7 +238,7 @@ function setNewDBEntryStatus(createResult = UPDATE_RESULT.IN_PROGRESS) {
     switch (createResult) {
         case UPDATE_RESULT.IN_PROGRESS: {
             statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-success');
-            statusDiv.innerText = 'Creating new database entry...';
+            statusDiv.innerText = 'Crawler has begun! Once it finishes, results will display below.';
             break;
         }
         case UPDATE_RESULT.SUCCESS: {
