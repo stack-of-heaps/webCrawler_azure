@@ -52,21 +52,25 @@ app.post('/search', async (req, res) => {
   let depth = req.body.search_depth;
   let type = req.body.search_type;
   let crawlerResult = null;
+  let depthMaxLinks = 30;
+  let breadthMaxLinks = 6;
 
   if (type === 'depth_search') {
     try {
-      crawlerResult = await depthSearch.crawl(url, depth);
+      crawlerResult = await depthSearch.crawl(url, depth, depthMaxLinks);
     }
     catch (e) {
       console.log('/search error: ', e);
+      crawlerResult = null
     }
   }
   else {
     try {
-      crawlerResult = await breadthSearch.crawl(url, depth);
+      crawlerResult = await breadthSearch.crawl(url, depth, breadthMaxLinks);
     }
     catch (e) {
       console.log('/search error: ', e);
+      crawlerResult = null;
     }
   }
   res.send(crawlerResult);
@@ -154,7 +158,7 @@ app.post('/updateCrawlerData', async (req, res) => {
 
   let mongoDTO = {
     depth: req.body.search_depth,
-    crawlerData: JSON.stringify(crawlerResult),
+    crawlerData: JSON.stringify(crawlerResult.data),
     date: dayjs().format(),
     search_type: search_type
   }
@@ -194,9 +198,3 @@ function createMongoDTO(reqBody) {
     crawlerData: reqBody.crawlerData
   }
 }
-
-app.get('/crawlertest', async (req, res) => {
-
-  depthSearch.crawl('http://www.google.com', 3);
-
-})
