@@ -157,9 +157,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
             setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
             const pastSearch = await fetchPastSearchByURL(searchDTO.search_url, searchDTO.search_type);
             buildChart(JSON.parse(pastSearch.crawlerData));
-            sidePanelManager.buildSidePanel().then(() => {
-                sidePanelManager.populateSidePanel(pastSearch.crawlerData)
-            })
+            sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(pastSearch.crawlerData));
             break;
         }
         case PAST_SEARCH_RESPONSES.EXISTS_STALE: {
@@ -167,7 +165,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
             const chartData = await updateCrawlerDepth(searchDTO);
             setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
             buildChart(chartData);
-            sidePanelManager.buildSidePanel().then(done => sidePanelManager.populateSidePanel(chartData));
+            sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData));
 
             break;
         }
@@ -176,9 +174,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
             const chartData = await updateCrawlerDepth(searchDTO);
             setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
             buildChart(chartData);
-            sidePanelManager.buildSidePanel().then(done => {
-                sidePanelManager.populateSidePanel(chartData.data)
-            })
+            sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData.data));
         }
             break;
         case PAST_SEARCH_RESPONSES.NOT_EXIST: {
@@ -192,9 +188,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
                 pastSearchManager.setPastSearchCookie(searchDTO.search_url, result._id);
                 setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
                 buildChart(chartData.data);
-                sidePanelManager.buildSidePanel().then(() => {
-                    sidePanelManager.populateSidePanel(chartData.data)
-                })
+                sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData.data));
             }
             else {
                 setNewDBEntryStatus(UPDATE_RESULT.FAILURE);
