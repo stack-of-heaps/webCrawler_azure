@@ -119,32 +119,32 @@ function setPastSearchStatus(status = PAST_SEARCH_RESPONSES.IN_PROGRESS) {
         switch (status) {
             case PAST_SEARCH_RESPONSES.IN_PROGRESS: {
                 statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-info');
-                statusH.innerText = 'Searching database for that URL...';
+                statusDiv.innerText = 'Searching database for that URL...';
                 break;
             }
             case PAST_SEARCH_RESPONSES.EXISTS_FRESH: {
                 statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-primary');
-                statusH.innerText = 'Past search found with fresh data.';
+                statusDiv.innerText = 'Past search found with fresh data.';
                 break;
             }
             case PAST_SEARCH_RESPONSES.EXISTS_STALE: {
                 statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-primary');
-                statusH.innerText = 'Past search found with stale data. The search will be conducted again to ensure that crawler search data is as accurate as possible.';
+                statusDiv.innerText = 'Past search found with stale data. The search will be conducted again to ensure that crawler search data is as accurate as possible.';
                 break;
             }
             case PAST_SEARCH_RESPONSES.EXISTS_SHALLOW: {
                 statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-primary');
-                statusH.innerText = 'Past search found, but not to the depth you specified. Will now conduct search to gather more data.';
+                statusDiv.innerText = 'Past search found, but not to the depth you specified. Will now conduct search to gather more data.';
                 break;
             }
             case PAST_SEARCH_RESPONSES.NOT_EXIST: {
                 statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-primary');
-                statusH.innerText = 'No one has searched for that URL before! Firing up the web crawler...';
+                statusDiv.innerText = 'No one has searched for that URL before! Firing up the web crawler...';
                 break;
             }
             default: {
                 statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-danger');
-                statusH.innerText = 'Something went wrong while querying the database for prior searches. Please try again.';
+                statusDiv.innerText = 'Something went wrong while querying the database for prior searches. Please try again.';
                 break;
             }
         }
@@ -271,22 +271,22 @@ function setNewDBEntryStatus(createResult = UPDATE_RESULT.IN_PROGRESS) {
         switch (createResult) {
             case UPDATE_RESULT.IN_PROGRESS: {
                 statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-success');
-                statusH.innerText = 'Creating new database entry...';
+                statusDiv.innerText = 'Creating new database entry...';
                 break;
             }
             case UPDATE_RESULT.SUCCESS: {
                 statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-success');
-                statusH.innerText = 'Successfully added search to the database. Once the crawler is finished, they will be displayed here. You can access the results any time in the future using the "Past Searches" element in the bottom left corner of the screen.';
+                statusDiv.innerText = 'Crawler has begun! Once it finishes, results will display below.';
                 break;
             }
             case UPDATE_RESULT.FAILURE: {
                 statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-danger');
-                statusH.innerText = 'Could not add to the database. Something went wrong. Please try again.';
+                statusDiv.innerText = 'Could not add to the database. Something went wrong. Please try again.';
                 break;
             }
             default: {
                 statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-danger');
-                statusH.innerText = 'Could not add to the database. Something went wrong. Please try again.';
+                statusDiv.innerText = 'Could not add to the database. Something went wrong. Please try again.';
                 break;
             }
         }
