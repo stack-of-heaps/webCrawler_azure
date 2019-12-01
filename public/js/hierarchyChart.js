@@ -103,6 +103,7 @@ function buildChart(response) {
 }
 
 function clearScreen() {
-  $(".alert").remove();
   $("svg").remove();
+  let searchStatus = document.getElementById('search_status');
+  searchStatus.hidden = true;
 }
