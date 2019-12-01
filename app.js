@@ -72,16 +72,6 @@ app.post('/search', async (req, res) => {
   res.send(crawlerResult);
 });
 
-app.get('/scraper', (req, res) => {
-  // data = { search_url: '',
-  //          search_type: 'breadth_search',
-  //          search_depth: '' }
-  var webScraper = new WebScraper(data);
-  Crawl.parsedLinkInfo(webScraper, function (scraper) {
-    res.send(scraper.returnJsonData());
-  });
-});
-
 app.post('/checkURL', async (req, res) => {
   let url = req.body.url;
   try {
