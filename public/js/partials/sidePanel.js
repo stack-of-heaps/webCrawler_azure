@@ -40,17 +40,13 @@ export function flattenBreadthCrawlerData(crawlerData) {
     let nodeCopy = Object.assign({}, crawlerData);
     _.omit(nodeCopy, "children");
 
-
-
     if (crawlerData && crawlerData.children) {
         for (let children of crawlerData.children) {
             grabBreadthChildren(depthArray, children);
         }
     }
 
-    let orderedByDepth = depthArray.sort(orderByDepth);
-
-    return orderedByDepth;
+    return depthArray;
 }
 
 function grabDepthChildren(depthArray, child) {
@@ -75,22 +71,22 @@ function grabDepthChildren(depthArray, child) {
 function grabBreadthChildren(depthArray, child) {
     let refCopy = Object.assign({}, child);
     let childCopy = _.omit(refCopy, "children");
-    
+
     let nodeDepth = childCopy.depth - 1;
     if (_.isArray(depthArray[nodeDepth])) {
-        console.log(`depth: ${nodeDepth}, adding to existing array within depthArray `);
+        //console.log(`depth: ${nodeDepth}, adding to existing array within depthArray `);
         depthArray[nodeDepth].push(childCopy);
     }
 
     else if (_.isObject(depthArray[nodeDepth])) {
-        console.log(`depth: ${nodeDepth}, creating array within depthArray `);
+        //console.log(`depth: ${nodeDepth}, creating array within depthArray `);
         let newArray = new Array();
         newArray.push(depthArray[nodeDepth]);
         newArray.push(childCopy);
         depthArray[nodeDepth] = newArray;
     }
     else {
-        console.log(`depth: ${nodeDepth}, just adding node `);
+        //console.log(`depth: ${nodeDepth}, just adding node `);
         depthArray.push(childCopy);
     }
 
@@ -115,7 +111,14 @@ function orderByDepth(a, b) {
 
 function buildSidePanelDepth(crawlerArray) {
     let depthSelector = document.getElementById('jump-to-depth');
-    crawlerArray.forEach(entry => createDepthOption(depthSelector, entry.depth));
+
+    if (crawlerArray.some(entry => _.isArray(entry))) {
+        for (let i = 0; i < crawlerArray.length; i++) {
+            createDepthOption(depthSelector, i + 1);
+        }
+    } else {
+        crawlerArray.forEach(entry => createDepthOption(depthSelector, entry.depth));
+    }
 }
 
 function createDepthOption(depthSelector, depth) {
@@ -124,14 +127,14 @@ function createDepthOption(depthSelector, depth) {
     depthSelector.appendChild(newOption);
 }
 
-function displayAllLinks(crawlerData) {
+function displayAllDepthLinks(crawlerData) {
 
     let highlightElementTable = document.getElementById('highlight-element-tbody');
 
     crawlerData.links.forEach((link, index) => {
         let newTR = document.createElement('tr');
         let numTD = document.createElement('td');
-        numTD.innerText = index;
+        numTD.innerText = index + 1;
         numTD.setAttribute('class', 'text-center align-middle');
         newTR.appendChild(numTD);
 
@@ -139,16 +142,64 @@ function displayAllLinks(crawlerData) {
         urlTD.setAttribute('colspan', '2');
         urlTD.setAttribute('class', 'text-left align-middle');
         let href = document.createElement('a');
-        href.setAttribute('href', link.url);
+
+        // Links have URLs; nodes have Titles
+        if (link.url) {
+            href.setAttribute('href', link.url);
+            href.innerText = link.url;
+        }
+        if (link.title) {
+            href.setAttribute('href', link.self);
+            href.innerText = link.self;
+        }
+
         href.setAttribute('class', 'text-light');
-        href.innerText = link.type;
         urlTD.appendChild(href);
         newTR.appendChild(urlTD);
 
         let urlTextTD = document.createElement('td');
         urlTextTD.setAttribute('class', 'text-center align-middle');
 
-        urlTextTD.innerText = link.text;
+        if (link.title) {
+            urlTextTD.innerText = link.description;
+        }
+        else {
+            urlTextTD.innerText = link.text;
+        }
+        newTR.appendChild(urlTextTD);
+
+        highlightElementTable.appendChild(newTR);
+
+    });
+}
+
+function displayAllBreadthLinks(crawlerData) {
+
+    let highlightElementTable = document.getElementById('highlight-element-tbody');
+
+    crawlerData.forEach((node, index) => {
+        let newTR = document.createElement('tr');
+        let numTD = document.createElement('td');
+        numTD.innerText = index + 1;
+        numTD.setAttribute('class', 'text-center align-middle');
+        newTR.appendChild(numTD);
+
+        let urlTD = document.createElement('td');
+        urlTD.setAttribute('colspan', '2');
+        urlTD.setAttribute('class', 'text-left align-middle');
+
+        let href = document.createElement('a');
+        href.setAttribute('href', node.self);
+        href.innerText = node.self;
+        href.setAttribute('class', 'text-light');
+
+        urlTD.appendChild(href);
+        newTR.appendChild(urlTD);
+
+        let urlTextTD = document.createElement('td');
+        urlTextTD.setAttribute('class', 'text-center align-middle');
+        urlTextTD.innerText = node.title;
+
         newTR.appendChild(urlTextTD);
 
         highlightElementTable.appendChild(newTR);
@@ -160,11 +211,52 @@ function clearDepthTable() {
     $('#highlight-element-tbody').empty()
 }
 
+function displayDepthFavicons(crawlerArray, event) {
+    clearDepthTable();
+    let depth = event.target.value;
+    depth -= 1;
+
+    let depthNode = null;
+    if (_.isArray(crawlerArray[depth])) {
+        crawlerArray[depth].forEach(entry => depthNode.push(entry.favicon));
+    }
+    else {
+        depthNode = crawlerArray[depth - 1];
+    }
+
+    displayAllLinks(depthNode);
+}
+
+function displayDepthImages(crawlerArray, event) {
+    clearDepthTable();
+    let depth = event.target.value;
+    depth -= 1;
+
+    let depthNode = null;
+    if (_.isArray(crawlerArray[depth])) {
+        crawlerArray[depth].forEach(entry => depthNode.push(entry.images));
+    }
+    else {
+        depthNode = crawlerArray[depth - 1];
+    }
+
+    displayAllLinks(depthNode);
+}
+
 function displayDepthLinks(crawlerArray, event) {
     clearDepthTable();
     let depth = event.target.value;
-    let depthNode = crawlerArray[depth - 1];
-    displayAllLinks(depthNode);
+
+    if (_.isArray(crawlerArray[depth])) {
+        let linksArray = [];
+        crawlerArray[depth].forEach(entry => linksArray.push(entry));
+        displayAllBreadthLinks(linksArray);
+    }
+
+    else {
+        let depthNode = crawlerArray[depth - 1];
+        displayAllDepthLinks(depthNode);
+    }
 }
 
 function getObjectType(obj) {
@@ -187,7 +279,6 @@ export function populateSidePanel(crawlerData, searchType) {
     }
 
     let flattenedCrawler = null;
-    console.log('searchtype: ', searchType);
     if (searchType === 'depth_search') {
         flattenedCrawler = flattenDepthCrawlerData(parsedCrawler);
     }
