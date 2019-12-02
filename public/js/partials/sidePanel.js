@@ -154,6 +154,7 @@ function displayAllDepthLinks(crawlerData) {
         }
 
         href.setAttribute('class', 'text-light');
+        href.setAttribute('target', '_blank');
         urlTD.appendChild(href);
         newTR.appendChild(urlTD);
 
@@ -177,7 +178,7 @@ function displayAllBreadthLinks(crawlerData) {
 
     let highlightElementTable = document.getElementById('highlight-element-tbody');
 
-    crawlerData.forEach((node, index) => {
+    crawlerData.forEach((link, index) => {
         let newTR = document.createElement('tr');
         let numTD = document.createElement('td');
         numTD.innerText = index + 1;
@@ -189,22 +190,121 @@ function displayAllBreadthLinks(crawlerData) {
         urlTD.setAttribute('class', 'text-left align-middle');
 
         let href = document.createElement('a');
-        href.setAttribute('href', node.self);
-        href.innerText = node.self;
+        href.setAttribute('href', link.url);
+        href.innerText = link.url;
         href.setAttribute('class', 'text-light');
+        href.setAttribute('target', '_blank');
 
         urlTD.appendChild(href);
         newTR.appendChild(urlTD);
 
         let urlTextTD = document.createElement('td');
         urlTextTD.setAttribute('class', 'text-center align-middle');
-        urlTextTD.innerText = node.title;
+        urlTextTD.innerText = link.text;
 
         newTR.appendChild(urlTextTD);
 
         highlightElementTable.appendChild(newTR);
 
     });
+}
+
+function displayAllImages(imageArray) {
+
+    let highlightElementTable = document.getElementById('highlight-element-tbody');
+    let allURLs = [];
+
+    let breadthFlag = false;
+    for (let i = 0; i < imageArray.length; i++) {
+        if (_.isArray(imageArray[i])) {
+            breadthFlag = true;
+            break;
+        }
+    }
+
+    if (breadthFlag) {
+        let allURLs = [];
+        imageArray.forEach(entry => {
+            entry.forEach((image, index) => {
+
+                if (allURLs.includes(image.url)) {
+                    return;
+                }
+                allURLs.push(image.url);
+
+                let newTR = document.createElement('tr');
+                let numTD = document.createElement('td');
+                numTD.innerText = index + 1;
+                numTD.setAttribute('class', 'text-center align-middle');
+                newTR.appendChild(numTD);
+
+                let urlTD = document.createElement('td');
+                urlTD.setAttribute('colspan', '2');
+                urlTD.setAttribute('class', 'align-middle');
+
+                let img = document.createElement('img');
+                img.setAttribute('class', 'img-fluid');
+                img.setAttribute('alt', image.text);
+                img.setAttribute('src', image.url);
+                //img.setAttribute('height', 100);
+
+                let href = document.createElement('a');
+                href.setAttribute('href', image.url);
+                href.setAttribute('target', '_blank');
+
+                href.appendChild(img);
+                urlTD.appendChild(href);
+                newTR.appendChild(urlTD);
+
+                let urlTextTD = document.createElement('td');
+                urlTextTD.setAttribute('class', 'text-center align-middle');
+                urlTextTD.innerText = image.text;
+
+                newTR.appendChild(urlTextTD);
+                highlightElementTable.appendChild(newTR);
+            })
+        })
+    }
+    else {
+        let index = 0;
+        imageArray.forEach(image => {
+            if (allURLs.includes(image.url)) {
+                return;
+            }
+            index++;
+            allURLs.push(image.url);
+
+            let newTR = document.createElement('tr');
+            let numTD = document.createElement('td');
+            numTD.innerText = index;
+            numTD.setAttribute('class', 'text-center align-middle');
+            newTR.appendChild(numTD);
+
+            let urlTD = document.createElement('td');
+            urlTD.setAttribute('colspan', '2');
+            urlTD.setAttribute('class', 'align-middle');
+
+            let img = document.createElement('img');
+            img.setAttribute('class', 'img-fluid');
+            img.setAttribute('alt', image.text);
+            img.setAttribute('src', image.url);
+
+            let href = document.createElement('a');
+            href.setAttribute('href', image.url);
+            href.setAttribute('target', '_blank');
+
+            href.appendChild(img);
+            urlTD.appendChild(href);
+            newTR.appendChild(urlTD);
+
+            let urlTextTD = document.createElement('td');
+            urlTextTD.setAttribute('class', 'text-center align-middle');
+            urlTextTD.innerText = image.text;
+
+            newTR.appendChild(urlTextTD);
+            highlightElementTable.appendChild(newTR);
+        })
+    };
 }
 
 function clearDepthTable() {
@@ -227,34 +327,41 @@ function displayDepthFavicons(crawlerArray, event) {
     displayAllLinks(depthNode);
 }
 
-function displayDepthImages(crawlerArray, event) {
+function getDepthImages(crawlerArray, depth) {
     clearDepthTable();
-    let depth = event.target.value;
     depth -= 1;
 
-    let depthNode = null;
-    if (_.isArray(crawlerArray[depth])) {
-        crawlerArray[depth].forEach(entry => depthNode.push(entry.images));
+    let depthImages = [];
+    if (crawlerArray.some(entry => _.isArray(entry))) {
+        crawlerArray[depth].forEach(entry =>
+            entry.images.forEach(image =>
+                depthImages.push(image)
+            )
+        )
     }
     else {
-        depthNode = crawlerArray[depth - 1];
+        depthImages = crawlerArray[depth].images;
+        //depthImages = _.uniqBy(allImages, (img) => { img.url });
     }
 
-    displayAllLinks(depthNode);
+    displayAllImages(depthImages);
 }
 
-function displayDepthLinks(crawlerArray, event) {
+function displayLinks(crawlerArray, depth) {
     clearDepthTable();
-    let depth = event.target.value;
+    depth--;
 
     if (_.isArray(crawlerArray[depth])) {
         let linksArray = [];
-        crawlerArray[depth].forEach(entry => linksArray.push(entry));
+        crawlerArray[depth].forEach(node =>
+            node.links.forEach(link => linksArray.push(link)
+            )
+        )
         displayAllBreadthLinks(linksArray);
     }
 
     else {
-        let depthNode = crawlerArray[depth - 1];
+        let depthNode = crawlerArray[depth];
         displayAllDepthLinks(depthNode);
     }
 }
@@ -285,9 +392,62 @@ export function populateSidePanel(crawlerData, searchType) {
     else {
         flattenedCrawler = flattenBreadthCrawlerData(parsedCrawler);
     }
-    //displayAllLinks(flattenedCrawler, 1);
     buildSidePanelDepth(flattenedCrawler);
-    console.log('flattenedCrawler: ', flattenedCrawler);
+    //console.log('flattenedCrawler: ', flattenedCrawler);
 
-    document.getElementById('jump-to-depth').addEventListener('change', function (event) { displayDepthLinks(flattenedCrawler, event) });
+    //document.getElementById('jump-to-depth').addEventListener('change', function (event) { displayDepthLinks(flattenedCrawler, event) });
+    document.getElementById('jump-to-depth').addEventListener('change', function (event) { displaySelectionCategories(flattenedCrawler, event) });
+    document.getElementById('highlight-element').addEventListener('change', function (event) { displaySelectedElements(flattenedCrawler, event) });
+}
+
+function displaySelectionCategories(crawlerData, event) {
+
+    let o = document.getElementById('highlight-element');
+
+    if (o.childElementCount === 1) {
+
+        let newOption = document.createElement('option');
+        newOption.innerText = 'Links';
+
+        let newOption2 = document.createElement('option');
+        newOption2.innerText = 'Images';
+
+        o.appendChild(newOption);
+        o.appendChild(newOption2);
+    }
+    else {
+        let selectedValue = getHighlightSelection();
+        let selectedDepth = getDepthSelection();
+        if (selectedValue === 'Links') {
+            displayLinks(crawlerData, selectedDepth);
+        }
+        if (selectedValue === 'Images') {
+            getDepthImages(crawlerData, selectedDepth);
+        }
+    }
+}
+
+function displaySelectedElements(crawlerData, event) {
+
+    let selectedDepth = getDepthSelection();
+
+    if (event.target.value === 'Links') {
+        displayLinks(crawlerData, selectedDepth);
+    }
+
+    if (event.target.value === 'Images') {
+        let imageArray = getDepthImages(crawlerData, selectedDepth);
+        displayAllImages(imageArray);
+    }
+}
+
+function getDepthSelection() {
+
+    let o = document.getElementById('jump-to-depth');
+    return o.options[o.selectedIndex].text;
+}
+
+function getHighlightSelection() {
+    let o = document.getElementById('highlight-element');
+    return o.options[o.selectedIndex].text;
 }
