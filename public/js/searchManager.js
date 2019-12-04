@@ -151,7 +151,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
 
     switch (dbStatus) {
         case PAST_SEARCH_RESPONSES.EXISTS_FRESH: {
-            setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
+            setNewDBEntryStatus(PAST_SEARCH_RESPONSES.EXISTS_FRESH);
             const pastSearch = await fetchPastSearchByURL(searchDTO.search_url, searchDTO.search_type);
             buildChart(JSON.parse(pastSearch.crawlerData));
             sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(pastSearch.crawlerData, searchDTO.search_type));
