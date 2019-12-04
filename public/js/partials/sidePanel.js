@@ -10,7 +10,7 @@ export async function buildSidePanel(crawlerData) {
 export function buildSidePanelTutorial() {
     $('#inspect_results').load("/sidePanelTutorial");
 }
-export function deleteSidePanel() {
+function deleteSidePanel() {
     $('#inspect_results').empty()
 }
 
@@ -333,11 +333,11 @@ function getDepthImages(crawlerArray, depth) {
 
     let depthImages = [];
     if (crawlerArray.some(entry => _.isArray(entry))) {
-        crawlerArray[depth].forEach(entry =>
-            entry.images.forEach(image =>
-                depthImages.push(image)
-            )
-        )
+        for (let node of crawlerArray[depth]) {
+            if (node.status !== 400) {
+                node.images.forEach(image => depthImages.push(image));
+            }
+        }
     }
     else {
         depthImages = crawlerArray[depth].images;
@@ -353,10 +353,11 @@ function displayLinks(crawlerArray, depth) {
 
     if (_.isArray(crawlerArray[depth])) {
         let linksArray = [];
-        crawlerArray[depth].forEach(node =>
-            node.links.forEach(link => linksArray.push(link)
-            )
-        )
+        for (let node of crawlerArray[depth]) {
+            if (node.status !== 400) {
+                node.links.forEach(link => linksArray.push(link));
+            }
+        }
         displayAllBreadthLinks(linksArray);
     }
 
