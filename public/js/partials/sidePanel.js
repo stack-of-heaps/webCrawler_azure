@@ -7,7 +7,7 @@ export async function buildSidePanel(crawlerData) {
     })
 }
 
-function buildSidePanelTutorial() {
+export function buildSidePanelTutorial() {
     $('#inspect_results').load("/sidePanelTutorial");
 }
 function deleteSidePanel() {
