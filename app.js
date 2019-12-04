@@ -1,7 +1,6 @@
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const axios = require('axios');
-const crawler = require('./lib/crawler');
 const dayjs = require('dayjs');
 const depthSearch = require('./lib/depthSearch');
 const breadthSearch = require('./lib/breadthSearch');
