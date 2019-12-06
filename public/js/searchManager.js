@@ -54,9 +54,12 @@ export async function crawlerRequest(event) {
     setPastSearchStatus();
 
     let pastSearch = await fetchPastSearchByURL(url, search_type);
+    console.log('line 57'); 
     let pastSearchStatus = getPastSearchInfo(pastSearch, searchDTO);
+    console.log('line 59');
 
     setPastSearchStatus(pastSearchStatus);
+    console.log('line 62');
     actOnPastSearchStatus(pastSearchStatus, pastSearch, searchDTO);
 
 }
@@ -166,6 +169,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
                 sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData.data, chartData.type));
             }
             else {
+                console.log('chartData: ', chartData);
                 setNewDBEntryStatus(UPDATE_RESULT.FAILURE);
             }
             break;
@@ -187,8 +191,10 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
         case PAST_SEARCH_RESPONSES.NOT_EXIST: {
             setNewDBEntryStatus();
             const chartData = await submitChartForm(searchDTO);
+            console.log('line 193');
 
-            if (chartData === null && !chartData.error && chartData.data.depth !== -99 && chartData.data.status !== 400) {
+            if (chartData !== null && !chartData.error && chartData.data.depth !== -99 && chartData.data.status !== 400) {
+            console.log('line 196');
                 searchDTO.crawlerData = JSON.stringify(chartData.data);
                 let result = await createDBEntry(searchDTO);
 
@@ -198,6 +204,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
                 sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData.data, chartData.type));
             }
             else {
+                console.log('chartdata: ', chartData);
                 setNewDBEntryStatus(UPDATE_RESULT.FAILURE);
             }
             break;
