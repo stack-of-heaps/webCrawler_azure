@@ -131,6 +131,17 @@ function displayAllDepthLinks(crawlerData) {
 
     let highlightElementTable = document.getElementById('highlight-element-tbody');
 
+    if (crawlerData.links === null) {
+        let newTR = document.createElement('tr');
+        let urlTD = document.createElement('td');
+        urlTD.setAttribute('colspan', '3');
+        urlTD.setAttribute('class', 'text-left align-middle');
+        urlTD.innerText = 'Sorry, something went wrong fetching this data!';
+        newTR.appendChild(urlTD);
+        highlightElementTable.appendChild(newTR);
+        return;
+    }
+
     crawlerData.links.forEach((link, index) => {
         let newTR = document.createElement('tr');
         let numTD = document.createElement('td');
@@ -311,22 +322,6 @@ function clearDepthTable() {
     $('#highlight-element-tbody').empty()
 }
 
-function displayDepthFavicons(crawlerArray, event) {
-    clearDepthTable();
-    let depth = event.target.value;
-    depth -= 1;
-
-    let depthNode = null;
-    if (_.isArray(crawlerArray[depth])) {
-        crawlerArray[depth].forEach(entry => depthNode.push(entry.favicon));
-    }
-    else {
-        depthNode = crawlerArray[depth - 1];
-    }
-
-    displayAllLinks(depthNode);
-}
-
 function getDepthImages(crawlerArray, depth) {
     clearDepthTable();
     depth -= 1;
@@ -341,7 +336,6 @@ function getDepthImages(crawlerArray, depth) {
     }
     else {
         depthImages = crawlerArray[depth].images;
-        //depthImages = _.uniqBy(allImages, (img) => { img.url });
     }
 
     displayAllImages(depthImages);
@@ -349,10 +343,10 @@ function getDepthImages(crawlerArray, depth) {
 
 function displayLinks(crawlerArray, depth) {
     clearDepthTable();
-    depth--;
 
     if (_.isArray(crawlerArray[depth])) {
         let linksArray = [];
+        depth--;
         for (let node of crawlerArray[depth]) {
             if (node.status !== 400) {
                 node.links.forEach(link => linksArray.push(link));
@@ -394,9 +388,7 @@ export function populateSidePanel(crawlerData, searchType) {
         flattenedCrawler = flattenBreadthCrawlerData(parsedCrawler);
     }
     buildSidePanelDepth(flattenedCrawler);
-    //console.log('flattenedCrawler: ', flattenedCrawler);
 
-    //document.getElementById('jump-to-depth').addEventListener('change', function (event) { displayDepthLinks(flattenedCrawler, event) });
     document.getElementById('jump-to-depth').addEventListener('change', function (event) { displaySelectionCategories(flattenedCrawler, event) });
     document.getElementById('highlight-element').addEventListener('change', function (event) { displaySelectedElements(flattenedCrawler, event) });
 }

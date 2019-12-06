@@ -3,7 +3,7 @@
 }
 
 div#visualization {
-    height: 1500px;
+    min-height: 1500px;
 }
 
 .node circle {

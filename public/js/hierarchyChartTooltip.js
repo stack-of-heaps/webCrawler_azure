@@ -2,16 +2,30 @@ class HierarchyChartTooltip {
   static buildTooltip(d) {
     var toolTipDiv = "";
     toolTipDiv += "<div class='container graph-tooltip'>";
-    if(d.description != undefined) {
-      toolTipDiv += HierarchyChartTooltip.buildTooltipImageRow("Favicon", d.favicon);
-      toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Title", d.title);
-      toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Description", d.description);
+    if(d.self != undefined) {
+      if(d.favicon != null) {
+        toolTipDiv += HierarchyChartTooltip.buildTooltipImageRow("Favicon", d.favicon);
+      }
+      if(d.title != null) {
+        toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Title", d.title);
+      }
+      if(d.description != null) {
+        toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Description", d.description);
+      }
       toolTipDiv += HierarchyChartTooltip.buildTooltipLinkRow("Self", d.self);
     } else {
-      toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Orientation", d.orientation);
-      toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Text", d.text);
-      toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Type", d.type);
-      toolTipDiv += HierarchyChartTooltip.buildTooltipLinkRow("URL", d.url);
+      if(d.orientation != null) {
+        toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Orientation", d.orientation);
+      }
+      if(d.text != null) {
+        toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Text", d.text);
+      }
+      if(d.type != null) {
+        toolTipDiv += HierarchyChartTooltip.buildTooltipRow("Type", d.type);
+      }
+      if(d.url != null) {
+        toolTipDiv += HierarchyChartTooltip.buildTooltipLinkRow("URL", d.url);
+      }
     }
     toolTipDiv += "</div>";
     return toolTipDiv;

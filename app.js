@@ -1,5 +1,7 @@
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
+
 const axios = require('axios');
+const crawler = require('./lib/crawler');
 const dayjs = require('dayjs');
 const depthSearch = require('./lib/depthSearch');
 const breadthSearch = require('./lib/breadthSearch');
@@ -138,6 +140,11 @@ app.post('/updateCrawlerData', async (req, res) => {
 
   const { search_type, search_url, search_depth } = req.body;
 
+  const badResponse = {
+    data: null,
+    error: 'Error encountered in updateCrawlerData'
+  };
+
   let mongoID = req.body._id;
 
   if (mongoID === null) {
@@ -148,10 +155,22 @@ app.post('/updateCrawlerData', async (req, res) => {
   let crawlerResult;
 
   if (search_type === 'depth_search') {
-    crawlerResult = await depthSearch.crawl(search_url, search_depth);
+    try {
+      crawlerResult = await depthSearch.crawl(search_url, search_depth);
+    }
+    catch(e) {
+      console.log('Error in /updateCrawlerData depth search: ', e);
+      res.send(badResponse);
+    }
   }
   else {
-    crawlerResult = await breadthSearch.crawl(search_url, search_depth);
+    try {
+      crawlerResult = await breadthSearch.crawl(search_url, search_depth);
+    }
+    catch(e) {
+      console.log('Error in /updateCrawlerData breadth search: ', e);
+      res.send(badResponse);
+    }
   }
 
   let mongoDTO = {

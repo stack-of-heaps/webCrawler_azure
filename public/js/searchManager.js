@@ -151,7 +151,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
 
     switch (dbStatus) {
         case PAST_SEARCH_RESPONSES.EXISTS_FRESH: {
-            setNewDBEntryStatus(PAST_SEARCH_RESPONSES.EXISTS_FRESH);
+            setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
             const pastSearch = await fetchPastSearchByURL(searchDTO.search_url, searchDTO.search_type);
             buildChart(JSON.parse(pastSearch.crawlerData));
             sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(pastSearch.crawlerData, searchDTO.search_type));
@@ -160,7 +160,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
         case PAST_SEARCH_RESPONSES.EXISTS_STALE: {
             searchDTO._id = pastSearch._id;
             const chartData = await updateCrawlerDepth(searchDTO);
-            if (chartData && !chartData.error && chartData.data.depth !== -99 && chartData.data.status !== 400) {
+            if (chartData !== null && !chartData.error && chartData.data.depth !== -99 && chartData.data.status !== 400) {
                 setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
                 buildChart(chartData.data);
                 sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData.data, chartData.type));
@@ -173,7 +173,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
         case PAST_SEARCH_RESPONSES.EXISTS_SHALLOW: {
             searchDTO._id = pastSearch._id;
             const chartData = await updateCrawlerDepth(searchDTO);
-            if (chartData && !chartData.error && chartData.data.depth !== -99 && chartData.data.status !== 400) {
+            if (chartData !== null && !chartData.error && chartData.data.depth !== -99 && chartData.data.status !== 400) {
                 setNewDBEntryStatus(UPDATE_RESULT.SUCCESS);
                 buildChart(chartData.data);
                 sidePanelManager.buildSidePanel().then(() => sidePanelManager.populateSidePanel(chartData.data, chartData.type));
@@ -188,7 +188,7 @@ async function actOnPastSearchStatus(dbStatus, pastSearch, searchDTO) {
             setNewDBEntryStatus();
             const chartData = await submitChartForm(searchDTO);
 
-            if (chartData && !chartData.error && chartData.data.depth !== -99 && chartData.data.status !== 400) {
+            if (chartData === null && !chartData.error && chartData.data.depth !== -99 && chartData.data.status !== 400) {
                 searchDTO.crawlerData = JSON.stringify(chartData.data);
                 let result = await createDBEntry(searchDTO);
 
@@ -243,7 +243,7 @@ function setNewDBEntryStatus(createResult = UPDATE_RESULT.IN_PROGRESS) {
         }
         case UPDATE_RESULT.SUCCESS: {
             statusDiv.setAttribute('class', 'col-lg-4 col-md-4 col-sm btn bg-light');
-            statusDiv.innerText = 'Crawler has begun! Once it finishes, results will display below.';
+            statusDiv.innerText = 'Success! Data incoming..';
             break;
         }
         case UPDATE_RESULT.FAILURE: {

@@ -13,7 +13,7 @@ async function submitChartForm(data) {
         });
       },
       error: function () {
-        alert("There was an error crawling the page");
+        alert("There was an error crawling the page. Please try again.");
         reject({
           data: null,
           error: 'Error encountered in submitChartForm POST'
@@ -31,7 +31,6 @@ function buildChart(response) {
 
   chartData.buildTreeRoot();
   update(chartData.root);
-  d3.select(self.frameElement).style("height", "900px");
 
   function update(source) {
     // Compute the new tree layout.
@@ -96,11 +95,16 @@ function buildChart(response) {
       d._children = d.children;
       d.children = null;
     } else {
+      if (typeof d._children === "undefined") {
+        window.open(typeof d.self === "undefined" ? d.url : d.self);
+      }
       d.children = d._children;
       d._children = null;
     }
     update(d);
   }
+
+  d3.select(self.frameElement).style("height", "2000px");
 }
 
 function clearScreen() {

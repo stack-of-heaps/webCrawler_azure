@@ -13,18 +13,28 @@ class HierarchyChartLayout {
         right: 120,
         left: 300
     };
-    // this.width = 960 - this.margin.right - this.margin.left;
-    // this.height = 500 - this.margin.top - this.margin.bottom;
+    // // size of the diagram
     this.width = 960;
-    this.height = 1000;
+    this.height = 3200;
   }
 
   buildSvg() {
+    this.translateX = 250;
+    this.translateY = 20;
+    this.scaleSvg = 1;
+    if(Number($("#search_depth").val()) > 5) {
+      this.translateX = -150;
+      this.translateY = 300;
+      this.scaleSvg = .9;
+    } else if ($('input[name=search_type]:checked').val() === "breadth_search" && Number($("#search_depth").val()) > 2){
+      this.scaleSvg = .9;
+    }
+
     this.svg = d3.select("#visualization").append("svg")
                  .attr("width", "100%")
-                 .attr("height", "100%")
+                 .attr("height", this.height)
                  .append("g")
-                 .attr("transform", "translate(" + 250 + "," + 70 + ")");
+                 .attr("transform", "translate(" + this.translateX + "," + this.translateY + ") scale("+ this.scaleSvg +")");
                  //.attr("width", this.width + this.margin.right + this.margin.left)
                  //.attr("height", this.height + this.margin.top + this.margin.bottom)
   }
