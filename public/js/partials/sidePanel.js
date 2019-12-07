@@ -10,7 +10,7 @@ export async function buildSidePanel(crawlerData) {
 export function buildSidePanelTutorial() {
     $('#inspect_results').load("/sidePanelTutorial");
 }
-function deleteSidePanel() {
+export function deleteSidePanel() {
     $('#inspect_results').empty()
 }
 
